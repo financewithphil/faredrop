@@ -1,0 +1,9 @@
+{
+  "name": "FareDrop",
+  "short_name": "FareDrop",
+  "description": "Flight price drop alerts",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#1e40af"
+}
