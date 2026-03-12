@@ -2,6 +2,7 @@ import { useState } from "react";
 import { apiFetch } from "../hooks/useApi";
 
 const AIRLINES = [
+  // US Domestic
   { code: "WN", name: "Southwest Airlines" },
   { code: "DL", name: "Delta Air Lines" },
   { code: "UA", name: "United Airlines" },
@@ -10,6 +11,23 @@ const AIRLINES = [
   { code: "AS", name: "Alaska Airlines" },
   { code: "NK", name: "Spirit Airlines" },
   { code: "F9", name: "Frontier Airlines" },
+  // SkyTeam Alliance
+  { code: "KE", name: "Korean Air" },
+  { code: "AF", name: "Air France" },
+  { code: "KL", name: "KLM" },
+  { code: "AM", name: "Aeromexico" },
+  { code: "VS", name: "Virgin Atlantic" },
+  { code: "AZ", name: "ITA Airways" },
+  { code: "MU", name: "China Eastern" },
+  { code: "VN", name: "Vietnam Airlines" },
+  { code: "CI", name: "China Airlines" },
+  { code: "GA", name: "Garuda Indonesia" },
+  { code: "KQ", name: "Kenya Airways" },
+  { code: "SV", name: "Saudia" },
+  { code: "RO", name: "TAROM" },
+  { code: "ME", name: "Middle East Airlines" },
+  { code: "UX", name: "Air Europa" },
+  { code: "MF", name: "Xiamen Airlines" },
   { code: "OTHER", name: "Other Airline" },
 ];
 
