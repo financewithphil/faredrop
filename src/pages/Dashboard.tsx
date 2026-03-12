@@ -22,12 +22,30 @@ interface Flight {
   claim_status: string | null;
 }
 
+interface BaggageClaim {
+  id: string;
+  airline: string;
+  airline_code: string;
+  claim_type: string;
+  origin: string;
+  destination: string;
+  flight_date: string;
+  status: string;
+  estimated_value: number | null;
+  compensation_received: number | null;
+}
+
 export function Dashboard({
   onSelect,
+  onBaggageClaim,
+  onOpenBaggageClaim,
 }: {
   onSelect: (id: string) => void;
+  onBaggageClaim: () => void;
+  onOpenBaggageClaim: (id: string) => void;
 }) {
   const [flights, setFlights] = useState<Flight[]>([]);
+  const [baggageClaims, setBaggageClaims] = useState<BaggageClaim[]>([]);
   const [loading, setLoading] = useState(true);
   const [checking, setChecking] = useState(false);
   const [showPaste, setShowPaste] = useState(false);
@@ -47,8 +65,19 @@ export function Dashboard({
     }
   };
 
+  const fetchBaggageClaims = async () => {
+    try {
+      const res = await apiFetch("/api/baggage-claims");
+      const data = await res.json();
+      setBaggageClaims(data);
+    } catch (err) {
+      console.error("Failed to fetch baggage claims:", err);
+    }
+  };
+
   useEffect(() => {
     fetchFlights();
+    fetchBaggageClaims();
   }, []);
 
   const handleCheckNow = async () => {
@@ -96,9 +125,12 @@ export function Dashboard({
     return (
       <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
         <EmptyState />
-        <div style={{ textAlign: "center", paddingBottom: 40 }}>
+        <div style={{ textAlign: "center", paddingBottom: 40, display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
           <button onClick={() => setShowPaste(true)} style={styles.addBtnLg}>
             + Paste Booking Email
+          </button>
+          <button onClick={onBaggageClaim} style={{ ...styles.addBtnLg, background: "#475569" }}>
+            File Baggage Claim
           </button>
         </div>
         {showPaste && (
@@ -156,9 +188,12 @@ export function Dashboard({
             </p>
           )}
         </div>
-        <div style={{ display: "flex", gap: 8 }}>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           <button onClick={() => setShowPaste(true)} style={styles.addBtn}>
             + Add Flight
+          </button>
+          <button onClick={onBaggageClaim} style={styles.addBtn}>
+            Baggage Claim
           </button>
           <button
             onClick={handleCheckNow}
@@ -169,11 +204,56 @@ export function Dashboard({
           </button>
         </div>
       </div>
+      <div style={styles.emailTip}>
+        Forward booking emails to{" "}
+        <strong style={{ color: "#60a5fa" }}>track@faresaver.financewithphil.com</strong>
+        {" "}to auto-track flights
+      </div>
       <div style={styles.grid}>
         {flights.map((f) => (
           <FlightCard key={f.id} flight={f} onClick={() => onSelect(f.id)} />
         ))}
       </div>
+
+      {/* Baggage Claims */}
+      {baggageClaims.length > 0 && (
+        <div style={{ marginTop: 24 }}>
+          <h3 style={{ fontSize: 16, fontWeight: 600, color: "#e2e8f0", marginBottom: 12 }}>
+            Baggage Claims ({baggageClaims.length})
+          </h3>
+          <div style={styles.grid}>
+            {baggageClaims.map((bc) => (
+              <div
+                key={bc.id}
+                style={styles.baggageCard}
+                onClick={() => onOpenBaggageClaim(bc.id)}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div>
+                    <span style={{ fontSize: 16, fontWeight: 700, color: "#f1f5f9" }}>
+                      {bc.origin && bc.destination ? `${bc.origin} → ${bc.destination}` : bc.airline || bc.airline_code}
+                    </span>
+                    <span style={{ marginLeft: 8, fontSize: 13, color: "#94a3b8" }}>
+                      {bc.claim_type}
+                    </span>
+                  </div>
+                  <span style={{
+                    padding: "2px 10px", borderRadius: 12, fontSize: 11, fontWeight: 600,
+                    textTransform: "capitalize" as const,
+                    background: bc.status === "resolved" ? "#052e16" : "#1e3a5f",
+                    color: bc.status === "resolved" ? "#4ade80" : "#93c5fd",
+                  }}>
+                    {bc.status.replace("_", " ")}
+                  </span>
+                </div>
+                {bc.flight_date && (
+                  <p style={{ fontSize: 13, color: "#64748b", marginTop: 4 }}>{bc.flight_date}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {showPaste && (
         <div style={styles.overlay} onClick={() => setShowPaste(false)}>
@@ -240,7 +320,23 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     cursor: "pointer",
   },
+  emailTip: {
+    fontSize: 13,
+    color: "#64748b",
+    background: "#1e293b",
+    borderRadius: 8,
+    padding: "10px 14px",
+    marginBottom: 16,
+    border: "1px solid #334155",
+  },
   grid: { display: "flex", flexDirection: "column", gap: 12 },
+  baggageCard: {
+    background: "#1e293b",
+    borderRadius: 12,
+    padding: 16,
+    cursor: "pointer",
+    border: "1px solid #334155",
+  },
   addBtn: {
     padding: "8px 16px",
     borderRadius: 8,

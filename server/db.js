@@ -85,6 +85,35 @@ async function initDb() {
     FOREIGN KEY (user_id) REFERENCES users(id)
   )`);
 
+  db.run(`CREATE TABLE IF NOT EXISTS baggage_claims (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    flight_id TEXT,
+    airline TEXT,
+    airline_code TEXT,
+    claim_type TEXT NOT NULL DEFAULT 'lost',
+    is_international INTEGER DEFAULT 0,
+    flight_number TEXT,
+    origin TEXT,
+    destination TEXT,
+    flight_date TEXT,
+    file_reference TEXT,
+    status TEXT DEFAULT 'not_reported',
+    description TEXT,
+    items_json TEXT,
+    estimated_value REAL,
+    compensation_received REAL,
+    interim_expenses REAL,
+    notes TEXT,
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now')),
+    resolved_at TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (flight_id) REFERENCES flights(id) ON DELETE SET NULL
+  )`);
+
+  db.run("CREATE INDEX IF NOT EXISTS idx_baggage_claims_user ON baggage_claims(user_id)");
+
   // Migration: add user_id to flights if missing (existing installs)
   try {
     const cols = db.exec("PRAGMA table_info(flights)");

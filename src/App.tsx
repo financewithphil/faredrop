@@ -5,8 +5,10 @@ import { Header } from "./components/Header";
 import { Dashboard } from "./pages/Dashboard";
 import { FlightDetail } from "./pages/FlightDetail";
 import { ClaimAssistant } from "./pages/ClaimAssistant";
+import { BaggageClaimForm } from "./pages/BaggageClaimForm";
+import { BaggageClaimAssistant } from "./pages/BaggageClaimAssistant";
 
-type View = "dashboard" | "flight" | "claim";
+type View = "dashboard" | "flight" | "claim" | "baggage_form" | "baggage_claim";
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(isLoggedIn);
@@ -26,7 +28,17 @@ export default function App() {
     <div style={styles.layout}>
       <Header onLogout={() => setLoggedIn(false)} />
       <main style={styles.main}>
-        {view === "claim" && selectedId ? (
+        {view === "baggage_claim" && selectedId ? (
+          <BaggageClaimAssistant claimId={selectedId} onBack={goToDashboard} />
+        ) : view === "baggage_form" ? (
+          <BaggageClaimForm
+            onCreated={(claimId) => {
+              setSelectedId(claimId);
+              setView("baggage_claim");
+            }}
+            onBack={goToDashboard}
+          />
+        ) : view === "claim" && selectedId ? (
           <ClaimAssistant claimId={selectedId} onBack={goToDashboard} />
         ) : view === "flight" && selectedId ? (
           <FlightDetail
@@ -42,6 +54,11 @@ export default function App() {
             onSelect={(id) => {
               setSelectedId(id);
               setView("flight");
+            }}
+            onBaggageClaim={() => setView("baggage_form")}
+            onOpenBaggageClaim={(id) => {
+              setSelectedId(id);
+              setView("baggage_claim");
             }}
           />
         )}
