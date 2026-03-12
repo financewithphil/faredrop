@@ -18,6 +18,8 @@ interface Flight {
   status: string;
   check_count: number;
   alert_count: number;
+  claim_id: string | null;
+  claim_status: string | null;
 }
 
 export function Dashboard({

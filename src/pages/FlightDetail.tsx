@@ -30,13 +30,18 @@ interface PriceCheck {
 export function FlightDetail({
   flightId,
   onBack,
+  onOpenClaim,
 }: {
   flightId: string;
   onBack: () => void;
+  onOpenClaim: (claimId: string) => void;
 }) {
   const [flight, setFlight] = useState<Flight | null>(null);
   const [prices, setPrices] = useState<PriceCheck[]>([]);
   const [deleting, setDeleting] = useState(false);
+  const [claimId, setClaimId] = useState<string | null>(null);
+  const [claimStatus, setClaimStatus] = useState<string | null>(null);
+  const [creatingClaim, setCreatingClaim] = useState(false);
 
   useEffect(() => {
     apiFetch(`/api/flights/${flightId}`)
@@ -45,7 +50,33 @@ export function FlightDetail({
     apiFetch(`/api/flights/${flightId}/prices`)
       .then((r) => r.json())
       .then(setPrices);
+    apiFetch(`/api/claims/flight/${flightId}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data) {
+          setClaimId(data.id);
+          setClaimStatus(data.status);
+        }
+      });
   }, [flightId]);
+
+  const handleCreateClaim = async () => {
+    setCreatingClaim(true);
+    try {
+      const res = await apiFetch("/api/claims", {
+        method: "POST",
+        body: JSON.stringify({ flightId }),
+      });
+      const data = await res.json();
+      if (data.id) {
+        onOpenClaim(data.id);
+      }
+    } catch (err) {
+      console.error("Failed to create claim:", err);
+    } finally {
+      setCreatingClaim(false);
+    }
+  };
 
   const handleDelete = async () => {
     if (!confirm("Stop tracking this flight?")) return;
@@ -133,6 +164,44 @@ export function FlightDetail({
           </div>
         )}
       </div>
+
+      {/* Claim Section */}
+      {savings !== null && savings > 10 && (
+        <div style={styles.claimCard}>
+          {claimId ? (
+            <>
+              <div style={styles.claimHeader}>
+                <span style={styles.claimBadge}>{claimStatus?.replace("_", " ")}</span>
+                <span style={styles.claimSavings}>Save ${savings.toFixed(0)}</span>
+              </div>
+              <p style={styles.claimText}>
+                You have a claim in progress for this flight.
+              </p>
+              <button onClick={() => onOpenClaim(claimId)} style={styles.claimBtn}>
+                View Claim &amp; Filing Instructions
+              </button>
+            </>
+          ) : (
+            <>
+              <div style={styles.claimHeader}>
+                <span style={styles.claimSavings}>
+                  Price dropped ${savings.toFixed(0)}!
+                </span>
+              </div>
+              <p style={styles.claimText}>
+                You may be eligible for a travel credit from the airline.
+              </p>
+              <button
+                onClick={handleCreateClaim}
+                disabled={creatingClaim}
+                style={styles.claimBtn}
+              >
+                {creatingClaim ? "Creating..." : "File a Claim"}
+              </button>
+            </>
+          )}
+        </div>
+      )}
 
       <button
         onClick={handleDelete}
@@ -250,6 +319,49 @@ const styles: Record<string, React.CSSProperties> = {
   },
   checkDate: { color: "#94a3b8" },
   checkPrice: { fontWeight: 600 },
+  claimCard: {
+    background: "#0c2d1b",
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 16,
+    border: "1px solid #166534",
+  },
+  claimHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  claimBadge: {
+    padding: "2px 10px",
+    borderRadius: 12,
+    background: "#1e3a2f",
+    color: "#4ade80",
+    fontSize: 12,
+    fontWeight: 600,
+    textTransform: "capitalize" as const,
+  },
+  claimSavings: {
+    fontSize: 18,
+    fontWeight: 700,
+    color: "#4ade80",
+  },
+  claimText: {
+    fontSize: 14,
+    color: "#86efac",
+    marginBottom: 12,
+  },
+  claimBtn: {
+    padding: "10px 20px",
+    borderRadius: 8,
+    border: "none",
+    background: "#16a34a",
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: 600,
+    cursor: "pointer",
+    width: "100%",
+  },
   deleteBtn: {
     width: "100%",
     padding: "12px 16px",

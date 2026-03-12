@@ -13,6 +13,8 @@ interface Flight {
   status: string;
   check_count: number;
   alert_count: number;
+  claim_id: string | null;
+  claim_status: string | null;
 }
 
 export function FlightCard({
@@ -59,7 +61,11 @@ export function FlightCard({
           </span>
         </div>
         {hasDrop && (
-          <div style={styles.savingsBadge}>Save ${savings!.toFixed(0)}</div>
+          <div style={styles.savingsBadge}>
+            {flight.claim_id
+              ? `Claim: ${(flight.claim_status || "detected").replace("_", " ")}`
+              : `Save $${savings!.toFixed(0)}`}
+          </div>
         )}
       </div>
       <div style={styles.footer}>

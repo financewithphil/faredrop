@@ -10,7 +10,6 @@ const upload = multer();
 
 // SendGrid Inbound Parse sends multipart/form-data
 router.post("/email", upload.none(), async (req, res) => {
-  // Verify webhook secret
   const secret = req.query.secret;
   if (secret !== process.env.WEBHOOK_SECRET) {
     return res.status(403).json({ error: "Invalid webhook secret" });
@@ -26,50 +25,42 @@ router.post("/email", upload.none(), async (req, res) => {
 
     console.log(`[WEBHOOK] Received email from: ${from}, subject: ${subject}`);
 
-    // Extract sender email
+    // Extract sender email and match to a registered user
     const emailMatch = from ? from.match(/<(.+?)>/) : null;
-    const userEmail = emailMatch ? emailMatch[1] : from || "unknown";
+    const senderEmail = emailMatch ? emailMatch[1].toLowerCase() : (from || "").toLowerCase();
 
-    // Parse with Claude
+    const user = db.getOne("SELECT id, email FROM users WHERE email = ?", [senderEmail]);
+    const userId = user ? user.id : null;
+    const userEmail = user ? user.email : senderEmail || "unknown";
+
+    if (!userId) {
+      console.log(`[WEBHOOK] No registered user for ${senderEmail}, saving without user_id`);
+    }
+
     const parsed = await parseBookingEmail(emailBody);
     console.log("[WEBHOOK] Parsed flight:", parsed);
 
     const id = uuidv4();
     db.run(
-      `INSERT INTO flights (id, user_email, airline, airline_code, flight_number,
+      `INSERT INTO flights (id, user_id, user_email, airline, airline_code, flight_number,
         origin, destination, departure_date, return_date, fare_class,
         price_paid, currency, booking_ref, passengers, raw_email)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        id,
-        userEmail,
-        parsed.airline,
-        parsed.airline_code,
-        parsed.flight_number,
-        parsed.origin,
-        parsed.destination,
-        parsed.departure_date,
-        parsed.return_date,
-        parsed.fare_class,
-        parsed.price_paid,
-        parsed.currency || "USD",
-        parsed.booking_ref,
-        parsed.passengers || 1,
-        emailBody.substring(0, 5000), // Truncate for storage
+        id, userId, userEmail,
+        parsed.airline, parsed.airline_code, parsed.flight_number,
+        parsed.origin, parsed.destination, parsed.departure_date, parsed.return_date,
+        parsed.fare_class, parsed.price_paid, parsed.currency || "USD",
+        parsed.booking_ref, parsed.passengers || 1, emailBody.substring(0, 5000),
       ]
     );
 
-    // Do an immediate first price check
+    // Immediate price check
     try {
-      const priceResult = await checkPrice({
-        ...parsed,
-        passengers: parsed.passengers || 1,
-      });
+      const priceResult = await checkPrice({ ...parsed, passengers: parsed.passengers || 1 });
       if (priceResult) {
-        db.run(
-          `INSERT INTO price_checks (flight_id, current_price) VALUES (?, ?)`,
-          [id, priceResult.currentPrice]
-        );
+        db.run(`INSERT INTO price_checks (flight_id, current_price) VALUES (?, ?)`,
+          [id, priceResult.currentPrice]);
       }
     } catch (priceErr) {
       console.error("[WEBHOOK] Initial price check failed:", priceErr.message);

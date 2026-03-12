@@ -4,26 +4,46 @@ import { LoginScreen } from "./components/LoginScreen";
 import { Header } from "./components/Header";
 import { Dashboard } from "./pages/Dashboard";
 import { FlightDetail } from "./pages/FlightDetail";
+import { ClaimAssistant } from "./pages/ClaimAssistant";
+
+type View = "dashboard" | "flight" | "claim";
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(isLoggedIn);
-  const [selectedFlight, setSelectedFlight] = useState<string | null>(null);
+  const [view, setView] = useState<View>("dashboard");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   if (!loggedIn) {
     return <LoginScreen onLogin={() => setLoggedIn(true)} />;
   }
 
+  const goToDashboard = () => {
+    setView("dashboard");
+    setSelectedId(null);
+  };
+
   return (
     <div style={styles.layout}>
       <Header onLogout={() => setLoggedIn(false)} />
       <main style={styles.main}>
-        {selectedFlight ? (
+        {view === "claim" && selectedId ? (
+          <ClaimAssistant claimId={selectedId} onBack={goToDashboard} />
+        ) : view === "flight" && selectedId ? (
           <FlightDetail
-            flightId={selectedFlight}
-            onBack={() => setSelectedFlight(null)}
+            flightId={selectedId}
+            onBack={goToDashboard}
+            onOpenClaim={(claimId) => {
+              setSelectedId(claimId);
+              setView("claim");
+            }}
           />
         ) : (
-          <Dashboard onSelect={(id) => setSelectedFlight(id)} />
+          <Dashboard
+            onSelect={(id) => {
+              setSelectedId(id);
+              setView("flight");
+            }}
+          />
         )}
       </main>
     </div>

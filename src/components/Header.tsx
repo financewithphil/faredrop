@@ -1,21 +1,28 @@
-import { logout } from "../hooks/useApi";
+import { logout, getUser } from "../hooks/useApi";
 
 export function Header({ onLogout }: { onLogout: () => void }) {
+  const user = getUser();
+
   return (
     <header style={styles.header}>
       <div style={styles.left}>
         <span style={styles.icon}>&#9992;</span>
         <span style={styles.title}>FareDrop</span>
       </div>
-      <button
-        onClick={() => {
-          logout();
-          onLogout();
-        }}
-        style={styles.logout}
-      >
-        Logout
-      </button>
+      <div style={styles.right}>
+        {user && (
+          <span style={styles.email}>{user.displayName || user.email}</span>
+        )}
+        <button
+          onClick={() => {
+            logout();
+            onLogout();
+          }}
+          style={styles.logout}
+        >
+          Logout
+        </button>
+      </div>
     </header>
   );
 }
@@ -32,6 +39,8 @@ const styles: Record<string, React.CSSProperties> = {
   left: { display: "flex", alignItems: "center", gap: 8 },
   icon: { fontSize: 22 },
   title: { fontSize: 18, fontWeight: 700, color: "#f1f5f9" },
+  right: { display: "flex", alignItems: "center", gap: 12 },
+  email: { fontSize: 13, color: "#64748b" },
   logout: {
     padding: "6px 14px",
     borderRadius: 6,

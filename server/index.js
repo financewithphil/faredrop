@@ -27,6 +27,7 @@ app.use(
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/flights", require("./routes/flights"));
 app.use("/api/flights", require("./routes/prices"));
+app.use("/api/claims", require("./routes/claims"));
 app.use("/api/webhook", require("./routes/webhook"));
 
 // Serve frontend in production
