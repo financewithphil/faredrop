@@ -37,10 +37,13 @@ export function LoginScreen({ onLogin }: { onLogin: () => void }) {
 
   return (
     <div style={styles.container}>
-      <div style={styles.card}>
-        <div style={styles.icon}>&#9992;</div>
-        <h1 style={styles.title}>FareDrop</h1>
-        <p style={styles.subtitle}>Flight price drop alerts</p>
+      <div className="ambient-bg" />
+      <div className="animate-in" style={styles.card}>
+        <div style={styles.logoRow}>
+          <span style={styles.plane}>&#9992;</span>
+          <h1 style={styles.title}>FareDrop</h1>
+        </div>
+        <p style={styles.subtitle}>Never overpay for flights again</p>
 
         <div style={styles.tabs}>
           <button
@@ -122,60 +125,103 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    background: "linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%)",
+    background: "var(--bg-base)",
     padding: 16,
+    position: "relative",
   },
   card: {
-    background: "#1e293b",
-    borderRadius: 16,
-    padding: 40,
+    background: "var(--bg-card)",
+    backdropFilter: "blur(24px) saturate(1.3)",
+    WebkitBackdropFilter: "blur(24px) saturate(1.3)",
+    borderRadius: 20,
+    padding: "48px 36px 40px",
     textAlign: "center",
     width: "100%",
-    maxWidth: 360,
+    maxWidth: 380,
+    border: "1px solid var(--border)",
+    position: "relative",
+    zIndex: 1,
   },
-  icon: { fontSize: 48, marginBottom: 8 },
-  title: { fontSize: 28, fontWeight: 700, color: "#f1f5f9", marginBottom: 4 },
-  subtitle: { fontSize: 14, color: "#94a3b8", marginBottom: 20 },
+  logoRow: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
+    marginBottom: 6,
+  },
+  plane: {
+    fontSize: 32,
+    filter: "drop-shadow(0 0 8px rgba(212, 168, 83, 0.4))",
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 700,
+    color: "var(--text-primary)",
+    fontFamily: "var(--font-display)",
+    letterSpacing: "-0.02em",
+  },
+  subtitle: {
+    fontSize: 14,
+    color: "var(--text-secondary)",
+    marginBottom: 28,
+    fontFamily: "var(--font-body)",
+    letterSpacing: "0.02em",
+  },
   tabs: {
     display: "flex",
-    borderRadius: 8,
+    borderRadius: 10,
     overflow: "hidden",
-    border: "1px solid #334155",
-    marginBottom: 20,
+    border: "1px solid var(--border)",
+    marginBottom: 24,
+    background: "rgba(0,0,0,0.2)",
   },
   tab: {
     flex: 1,
-    padding: "8px 0",
+    padding: "10px 0",
     border: "none",
     background: "transparent",
-    color: "#64748b",
-    fontSize: 14,
+    color: "var(--text-muted)",
+    fontSize: 13,
     fontWeight: 600,
     cursor: "pointer",
+    fontFamily: "var(--font-body)",
+    letterSpacing: "0.03em",
+    textTransform: "uppercase" as const,
   },
   activeTab: {
-    background: "#2563eb",
-    color: "#fff",
+    background: "var(--gold)",
+    color: "#0a0c14",
   },
-  form: { display: "flex", flexDirection: "column", gap: 12 },
+  form: { display: "flex", flexDirection: "column", gap: 14 },
   input: {
-    padding: "12px 16px",
-    borderRadius: 8,
-    border: "1px solid #334155",
-    background: "#0f172a",
-    color: "#f1f5f9",
-    fontSize: 15,
+    padding: "13px 16px",
+    borderRadius: 10,
+    border: "1px solid var(--border)",
+    background: "var(--bg-input)",
+    color: "var(--text-primary)",
+    fontSize: 14,
+    fontFamily: "var(--font-body)",
     outline: "none",
+    transition: "border-color 0.2s, box-shadow 0.2s",
   },
   button: {
-    padding: "12px 16px",
-    borderRadius: 8,
+    padding: "14px 16px",
+    borderRadius: 10,
     border: "none",
-    background: "#2563eb",
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: 600,
+    background: "var(--gold)",
+    color: "#0a0c14",
+    fontSize: 15,
+    fontWeight: 700,
     cursor: "pointer",
+    fontFamily: "var(--font-body)",
+    letterSpacing: "0.03em",
+    textTransform: "uppercase" as const,
+    marginTop: 4,
   },
-  error: { color: "#ef4444", fontSize: 14, marginTop: 4 },
+  error: {
+    color: "var(--red)",
+    fontSize: 13,
+    marginTop: 4,
+    fontFamily: "var(--font-body)",
+  },
 };

@@ -95,15 +95,21 @@ export function FlightDetail({
   const savings = latestPrice !== null ? flight.price_paid - latestPrice : null;
 
   return (
-    <div style={styles.container}>
+    <div className="animate-in" style={styles.container}>
       <button onClick={onBack} style={styles.backBtn}>
         &larr; All Flights
       </button>
 
-      <div style={styles.card}>
+      <div className="glass-card-static" style={styles.card}>
         <div style={styles.route}>
           <span style={styles.airport}>{flight.origin}</span>
-          <span style={styles.arrow}>&rarr;</span>
+          <span style={styles.routeLine}>
+            <span style={styles.routeDot} />
+            <span style={styles.routeDash} />
+            <span style={styles.routePlane}>&#9992;</span>
+            <span style={styles.routeDash} />
+            <span style={styles.routeDot} />
+          </span>
           <span style={styles.airport}>{flight.destination}</span>
         </div>
 
@@ -116,32 +122,34 @@ export function FlightDetail({
           )}
           <InfoRow label="Fare Class" value={flight.fare_class} />
           <InfoRow label="Passengers" value={String(flight.passengers)} />
-          <InfoRow label="Booking Ref" value={flight.booking_ref} />
-          <InfoRow label="Price Paid" value={`$${flight.price_paid}`} />
+          <InfoRow label="Booking Ref" value={flight.booking_ref} mono />
+          <InfoRow label="Price Paid" value={`$${flight.price_paid}`} mono />
           <InfoRow
             label="Current Price"
             value={latestPrice !== null ? `$${latestPrice}` : "Pending"}
             highlight={savings !== null && savings > 0}
+            mono
           />
           {savings !== null && savings > 0 && (
-            <InfoRow label="Savings" value={`$${savings.toFixed(0)}`} highlight />
+            <InfoRow label="Savings" value={`$${savings.toFixed(0)}`} highlight mono />
           )}
         </div>
       </div>
 
-      <div style={styles.chartCard}>
+      <div className="glass-card-static animate-in animate-in-1" style={styles.chartCard}>
         <h3 style={styles.sectionTitle}>Price History</h3>
         <PriceChart data={prices} pricePaid={flight.price_paid} />
       </div>
 
-      <div style={styles.checksCard}>
+      <div className="glass-card-static animate-in animate-in-2" style={styles.checksCard}>
         <h3 style={styles.sectionTitle}>
-          All Price Checks ({prices.length})
+          All Price Checks
+          <span style={styles.checkCount}>{prices.length}</span>
         </h3>
         {prices.length === 0 ? (
           <p style={styles.noData}>No checks yet. Runs 3x daily.</p>
         ) : (
-          <div style={styles.checksList}>
+          <div>
             {[...prices].reverse().map((p) => (
               <div key={p.id} style={styles.checkRow}>
                 <span style={styles.checkDate}>
@@ -153,8 +161,8 @@ export function FlightDetail({
                     color:
                       p.current_price !== null &&
                       p.current_price < flight.price_paid
-                        ? "#4ade80"
-                        : "#e2e8f0",
+                        ? "var(--green)"
+                        : "var(--text-primary)",
                   }}
                 >
                   {p.current_price !== null ? `$${p.current_price}` : "N/A"}
@@ -165,9 +173,8 @@ export function FlightDetail({
         )}
       </div>
 
-      {/* Claim Section */}
       {savings !== null && savings > 10 && (
-        <div style={styles.claimCard}>
+        <div className="gold-glow animate-in animate-in-3" style={styles.claimCard}>
           {claimId ? (
             <>
               <div style={styles.claimHeader}>
@@ -218,10 +225,12 @@ function InfoRow({
   label,
   value,
   highlight,
+  mono,
 }: {
   label: string;
   value: string | null;
   highlight?: boolean;
+  mono?: boolean;
 }) {
   return (
     <div style={infoStyles.row}>
@@ -229,8 +238,9 @@ function InfoRow({
       <span
         style={{
           ...infoStyles.value,
-          color: highlight ? "#4ade80" : "#e2e8f0",
+          color: highlight ? "var(--gold)" : "var(--text-primary)",
           fontWeight: highlight ? 700 : 500,
+          fontFamily: mono ? "var(--font-mono)" : "var(--font-body)",
         }}
       >
         {value || "N/A"}
@@ -243,135 +253,108 @@ const infoStyles: Record<string, React.CSSProperties> = {
   row: {
     display: "flex",
     justifyContent: "space-between",
-    padding: "8px 0",
-    borderBottom: "1px solid #1e293b",
+    padding: "10px 0",
+    borderBottom: "1px solid var(--border)",
   },
-  label: { color: "#64748b", fontSize: 14 },
-  value: { color: "#e2e8f0", fontSize: 14 },
+  label: { color: "var(--text-secondary)", fontSize: 13, fontFamily: "var(--font-body)" },
+  value: { color: "var(--text-primary)", fontSize: 13 },
 };
 
 const styles: Record<string, React.CSSProperties> = {
-  container: { padding: 20, maxWidth: 600, margin: "0 auto" },
+  container: { padding: 24, maxWidth: 640, margin: "0 auto", width: "100%" },
   loading: {
-    flex: 1,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    color: "#94a3b8",
+    flex: 1, display: "flex", alignItems: "center", justifyContent: "center",
+    color: "var(--text-secondary)", fontFamily: "var(--font-body)",
   },
   backBtn: {
-    background: "none",
-    border: "none",
-    color: "#3b82f6",
-    fontSize: 14,
-    cursor: "pointer",
-    marginBottom: 16,
-    padding: 0,
+    background: "none", border: "none", color: "var(--gold)",
+    fontSize: 14, cursor: "pointer", marginBottom: 20, padding: 0,
+    fontFamily: "var(--font-body)", fontWeight: 500,
   },
   card: {
-    background: "#1e293b",
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 16,
-    border: "1px solid #334155",
+    padding: 24, marginBottom: 18,
   },
   route: {
-    display: "flex",
-    alignItems: "center",
-    gap: 12,
-    marginBottom: 16,
-    paddingBottom: 16,
-    borderBottom: "1px solid #334155",
+    display: "flex", alignItems: "center", gap: 16,
+    marginBottom: 20, paddingBottom: 20, borderBottom: "1px solid var(--border)",
   },
-  airport: { fontSize: 28, fontWeight: 700, color: "#f1f5f9" },
-  arrow: { fontSize: 20, color: "#64748b" },
+  airport: {
+    fontSize: 32, fontWeight: 700, color: "var(--text-primary)",
+    fontFamily: "var(--font-display)", letterSpacing: "-0.02em",
+  },
+  routeLine: {
+    display: "flex", alignItems: "center", gap: 4, opacity: 0.4,
+  },
+  routeDot: {
+    width: 5, height: 5, borderRadius: "50%", background: "var(--gold)",
+  },
+  routeDash: {
+    width: 28, height: 1, background: "var(--text-muted)",
+  },
+  routePlane: { fontSize: 12, color: "var(--gold)" },
   infoGrid: {},
   chartCard: {
-    background: "#1e293b",
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 16,
-    border: "1px solid #334155",
+    padding: 24, marginBottom: 18,
   },
   sectionTitle: {
-    fontSize: 16,
-    fontWeight: 600,
-    color: "#e2e8f0",
-    marginBottom: 16,
+    fontSize: 16, fontWeight: 600, color: "var(--text-primary)",
+    marginBottom: 18, fontFamily: "var(--font-display)",
+    display: "flex", alignItems: "center", gap: 10,
+  },
+  checkCount: {
+    fontSize: 11, fontWeight: 700, background: "var(--indigo-dim)",
+    color: "var(--indigo)", padding: "2px 10px", borderRadius: 100,
+    fontFamily: "var(--font-mono)",
   },
   checksCard: {
-    background: "#1e293b",
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 16,
-    border: "1px solid #334155",
-    maxHeight: 300,
-    overflowY: "auto",
+    padding: 24, marginBottom: 18, maxHeight: 320, overflowY: "auto",
   },
-  noData: { color: "#64748b", fontSize: 14, textAlign: "center" },
-  checksList: {},
+  noData: {
+    color: "var(--text-muted)", fontSize: 14, textAlign: "center",
+    fontFamily: "var(--font-body)",
+  },
   checkRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "6px 0",
-    borderBottom: "1px solid #0f172a",
-    fontSize: 13,
+    display: "flex", justifyContent: "space-between",
+    padding: "8px 0", borderBottom: "1px solid var(--border)", fontSize: 13,
   },
-  checkDate: { color: "#94a3b8" },
-  checkPrice: { fontWeight: 600 },
+  checkDate: { color: "var(--text-secondary)", fontFamily: "var(--font-body)" },
+  checkPrice: { fontWeight: 600, fontFamily: "var(--font-mono)" },
   claimCard: {
-    background: "#0c2d1b",
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 16,
-    border: "1px solid #166534",
+    background: "rgba(212, 168, 83, 0.06)",
+    borderRadius: 14, padding: 22, marginBottom: 18,
+    border: "1px solid rgba(212, 168, 83, 0.2)",
   },
   claimHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8,
+    display: "flex", justifyContent: "space-between",
+    alignItems: "center", marginBottom: 10,
   },
   claimBadge: {
-    padding: "2px 10px",
-    borderRadius: 12,
-    background: "#1e3a2f",
-    color: "#4ade80",
-    fontSize: 12,
-    fontWeight: 600,
+    padding: "3px 12px", borderRadius: 100,
+    background: "rgba(212, 168, 83, 0.12)",
+    color: "var(--gold)", fontSize: 11, fontWeight: 700,
     textTransform: "capitalize" as const,
+    fontFamily: "var(--font-body)", letterSpacing: "0.04em",
   },
   claimSavings: {
-    fontSize: 18,
-    fontWeight: 700,
-    color: "#4ade80",
+    fontSize: 20, fontWeight: 700, color: "var(--gold)",
+    fontFamily: "var(--font-mono)", letterSpacing: "-0.02em",
   },
   claimText: {
-    fontSize: 14,
-    color: "#86efac",
-    marginBottom: 12,
+    fontSize: 14, color: "var(--text-secondary)", marginBottom: 14,
+    fontFamily: "var(--font-body)",
   },
   claimBtn: {
-    padding: "10px 20px",
-    borderRadius: 8,
-    border: "none",
-    background: "#16a34a",
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: 600,
-    cursor: "pointer",
-    width: "100%",
+    padding: "12px 24px", borderRadius: 10, border: "none",
+    background: "var(--gold)", color: "#0a0c14", fontSize: 14,
+    fontWeight: 700, cursor: "pointer", width: "100%",
+    fontFamily: "var(--font-body)", letterSpacing: "0.03em",
+    textTransform: "uppercase" as const,
   },
   deleteBtn: {
-    width: "100%",
-    padding: "12px 16px",
-    borderRadius: 8,
-    border: "1px solid #7f1d1d",
-    background: "#1c0a0a",
-    color: "#f87171",
-    fontSize: 14,
-    fontWeight: 600,
-    cursor: "pointer",
-    marginTop: 8,
+    width: "100%", padding: "12px 16px", borderRadius: 10,
+    border: "1px solid rgba(248, 113, 113, 0.2)",
+    background: "rgba(248, 113, 113, 0.06)",
+    color: "var(--red)", fontSize: 13, fontWeight: 600,
+    cursor: "pointer", marginTop: 8, fontFamily: "var(--font-body)",
   },
 };

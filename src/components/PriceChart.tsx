@@ -32,7 +32,7 @@ export function PriceChart({
 
   if (chartData.length === 0) {
     return (
-      <div style={{ color: "#64748b", textAlign: "center", padding: 32 }}>
+      <div style={{ color: "var(--text-muted)", textAlign: "center", padding: 32, fontFamily: "var(--font-body)", fontSize: 14 }}>
         No price data yet. Checks run 3x daily.
       </div>
     );
@@ -44,39 +44,46 @@ export function PriceChart({
         <LineChart data={chartData}>
           <XAxis
             dataKey="date"
-            tick={{ fill: "#64748b", fontSize: 11 }}
-            axisLine={{ stroke: "#334155" }}
+            tick={{ fill: "#505868", fontSize: 11, fontFamily: "'Outfit', sans-serif" }}
+            axisLine={{ stroke: "rgba(255,255,255,0.06)" }}
+            tickLine={false}
           />
           <YAxis
-            tick={{ fill: "#64748b", fontSize: 11 }}
-            axisLine={{ stroke: "#334155" }}
+            tick={{ fill: "#505868", fontSize: 11, fontFamily: "'JetBrains Mono', monospace" }}
+            axisLine={{ stroke: "rgba(255,255,255,0.06)" }}
+            tickLine={false}
             tickFormatter={(v) => `$${v}`}
           />
           <Tooltip
             contentStyle={{
-              background: "#0f172a",
-              border: "1px solid #334155",
-              borderRadius: 8,
-              color: "#f1f5f9",
+              background: "rgba(15, 18, 28, 0.95)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              borderRadius: 10,
+              color: "#eef0f4",
+              fontFamily: "'Outfit', sans-serif",
+              fontSize: 13,
+              backdropFilter: "blur(8px)",
             }}
             formatter={(value: number) => [`$${value}`, "Current Price"]}
           />
           <ReferenceLine
             y={pricePaid}
-            stroke="#ef4444"
-            strokeDasharray="6 3"
+            stroke="rgba(248, 113, 113, 0.5)"
+            strokeDasharray="6 4"
             label={{
               value: `Paid $${pricePaid}`,
-              fill: "#ef4444",
+              fill: "#f87171",
               fontSize: 11,
+              fontFamily: "'JetBrains Mono', monospace",
             }}
           />
           <Line
             type="monotone"
             dataKey="price"
-            stroke="#3b82f6"
+            stroke="#d4a853"
             strokeWidth={2}
-            dot={{ fill: "#3b82f6", r: 3 }}
+            dot={{ fill: "#d4a853", r: 3, stroke: "rgba(212,168,83,0.3)", strokeWidth: 4 }}
+            activeDot={{ fill: "#d4a853", r: 5, stroke: "rgba(212,168,83,0.4)", strokeWidth: 6 }}
           />
         </LineChart>
       </ResponsiveContainer>

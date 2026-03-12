@@ -1,0 +1,234 @@
+/* ── FareDrop Design System ── */
+/* Aviation Editorial Luxury — obsidian + gold + glass */
+
+:root {
+  /* Base palette */
+  --bg-base: #07080f;
+  --bg-surface: #0d1017;
+  --bg-card: rgba(15, 18, 28, 0.7);
+  --bg-elevated: rgba(22, 26, 40, 0.8);
+  --bg-input: rgba(10, 12, 20, 0.9);
+
+  /* Borders */
+  --border: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.12);
+  --border-accent: rgba(212, 168, 83, 0.25);
+
+  /* Text */
+  --text-primary: #eef0f4;
+  --text-secondary: #8892a4;
+  --text-muted: #505868;
+
+  /* Signature gold */
+  --gold: #d4a853;
+  --gold-dim: #b08c3e;
+  --gold-glow: rgba(212, 168, 83, 0.15);
+
+  /* Data colors */
+  --cyan: #38bdf8;
+  --green: #34d399;
+  --green-dim: rgba(52, 211, 153, 0.12);
+  --red: #f87171;
+  --red-dim: rgba(248, 113, 113, 0.12);
+  --indigo: #818cf8;
+  --indigo-dim: rgba(129, 140, 248, 0.15);
+
+  /* Typography */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Outfit', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+
+  /* Spacing */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 100px;
+}
+
+/* ── Reset & Base ── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-base);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ── Grain Overlay ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+
+/* ── Selection ── */
+::selection {
+  background: rgba(212, 168, 83, 0.3);
+  color: #fff;
+}
+
+/* ── Animations ── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes glow-border {
+  0%, 100% { border-color: rgba(212, 168, 83, 0.15); }
+  50% { border-color: rgba(212, 168, 83, 0.35); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes plane-fly {
+  0% { transform: translateX(-10px) rotate(-2deg); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateX(10px) rotate(2deg); opacity: 1; }
+}
+
+/* ── Utility Classes ── */
+.animate-in {
+  animation: fadeInUp 0.5s ease-out both;
+}
+
+.animate-in-1 { animation-delay: 0.05s; }
+.animate-in-2 { animation-delay: 0.1s; }
+.animate-in-3 { animation-delay: 0.15s; }
+.animate-in-4 { animation-delay: 0.2s; }
+.animate-in-5 { animation-delay: 0.25s; }
+
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.glass-card-static {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.gold-glow {
+  animation: glow-border 3s ease-in-out infinite;
+}
+
+.savings-pulse {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* ── Ambient Background Gradients ── */
+.ambient-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.ambient-bg::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(212, 168, 83, 0.04) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.ambient-bg::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -15%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.03) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+/* ── Input Focus States ── */
+input:focus, textarea:focus, select:focus {
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 0 3px var(--gold-glow) !important;
+}
+
+/* ── Button Hover ── */
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Link Hover ── */
+a {
+  transition: all 0.2s ease;
+}
+
+a:hover {
+  filter: brightness(1.15);
+}

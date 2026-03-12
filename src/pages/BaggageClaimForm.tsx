@@ -91,10 +91,10 @@ export function BaggageClaimForm({
   };
 
   return (
-    <div style={styles.container}>
+    <div className="animate-in" style={styles.container}>
       <button onClick={onBack} style={styles.backBtn}>&larr; Back</button>
 
-      <div style={styles.card}>
+      <div className="glass-card-static" style={styles.card}>
         <h2 style={styles.title}>File a Baggage Claim</h2>
         <p style={styles.subtitle}>
           We'll guide you through the airline-specific process step by step.
@@ -228,38 +228,62 @@ export function BaggageClaimForm({
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  container: { padding: 20, maxWidth: 500, margin: "0 auto" },
-  backBtn: { background: "none", border: "none", color: "#3b82f6", fontSize: 14, cursor: "pointer", marginBottom: 16, padding: 0 },
-  card: { background: "#1e293b", borderRadius: 12, padding: 24, border: "1px solid #334155" },
-  title: { fontSize: 20, fontWeight: 700, color: "#f1f5f9", marginBottom: 4 },
-  subtitle: { fontSize: 14, color: "#94a3b8", marginBottom: 24 },
-  form: { display: "flex", flexDirection: "column", gap: 16 },
-  label: { fontSize: 13, fontWeight: 600, color: "#94a3b8", marginBottom: -8 },
-  typeButtons: { display: "flex", gap: 8 },
-  typeBtn: {
-    flex: 1, padding: "10px 0", borderRadius: 8, border: "1px solid #334155",
-    background: "transparent", color: "#94a3b8", fontSize: 14, fontWeight: 600,
-    cursor: "pointer", textAlign: "center",
+  container: { padding: 24, maxWidth: 520, margin: "0 auto", width: "100%" },
+  backBtn: {
+    background: "none", border: "none", color: "var(--gold)",
+    fontSize: 14, cursor: "pointer", marginBottom: 20, padding: 0,
+    fontFamily: "var(--font-body)", fontWeight: 500,
   },
-  typeBtnActive: { background: "#2563eb", color: "#fff", borderColor: "#2563eb" },
+  card: { padding: 28 },
+  title: {
+    fontSize: 22, fontWeight: 700, color: "var(--text-primary)", marginBottom: 6,
+    fontFamily: "var(--font-display)", letterSpacing: "-0.02em",
+  },
+  subtitle: {
+    fontSize: 14, color: "var(--text-secondary)", marginBottom: 28,
+    fontFamily: "var(--font-body)",
+  },
+  form: { display: "flex", flexDirection: "column", gap: 18 },
+  label: {
+    fontSize: 11, fontWeight: 700, color: "var(--text-muted)", marginBottom: -10,
+    textTransform: "uppercase" as const, letterSpacing: "0.08em",
+    fontFamily: "var(--font-body)",
+  },
+  typeButtons: { display: "flex", gap: 10 },
+  typeBtn: {
+    flex: 1, padding: "11px 0", borderRadius: 10,
+    border: "1px solid var(--border)", background: "transparent",
+    color: "var(--text-secondary)", fontSize: 13, fontWeight: 600,
+    cursor: "pointer", textAlign: "center", fontFamily: "var(--font-body)",
+    transition: "all 0.2s ease",
+  },
+  typeBtnActive: {
+    background: "var(--gold)", color: "#0a0c14",
+    borderColor: "var(--gold)",
+  },
   select: {
-    padding: "10px 12px", borderRadius: 8, border: "1px solid #334155",
-    background: "#0f172a", color: "#f1f5f9", fontSize: 14, outline: "none",
+    padding: "12px 14px", borderRadius: 10, border: "1px solid var(--border)",
+    background: "var(--bg-input)", color: "var(--text-primary)", fontSize: 14,
+    outline: "none", fontFamily: "var(--font-body)",
   },
   input: {
-    width: "100%", padding: "10px 12px", borderRadius: 8, border: "1px solid #334155",
-    background: "#0f172a", color: "#f1f5f9", fontSize: 14, outline: "none",
-    boxSizing: "border-box" as const,
+    width: "100%", padding: "12px 14px", borderRadius: 10,
+    border: "1px solid var(--border)", background: "var(--bg-input)",
+    color: "var(--text-primary)", fontSize: 14, outline: "none",
+    boxSizing: "border-box" as const, fontFamily: "var(--font-body)",
   },
-  row: { display: "flex", gap: 12 },
+  row: { display: "flex", gap: 14 },
   textarea: {
-    width: "100%", padding: "10px 12px", borderRadius: 8, border: "1px solid #334155",
-    background: "#0f172a", color: "#f1f5f9", fontSize: 14, fontFamily: "inherit",
+    width: "100%", padding: "12px 14px", borderRadius: 10,
+    border: "1px solid var(--border)", background: "var(--bg-input)",
+    color: "var(--text-primary)", fontSize: 14, fontFamily: "var(--font-body)",
     resize: "vertical" as const, outline: "none", boxSizing: "border-box" as const,
   },
-  error: { color: "#ef4444", fontSize: 13 },
+  error: { color: "var(--red)", fontSize: 13, fontFamily: "var(--font-body)" },
   submitBtn: {
-    padding: "12px 0", borderRadius: 8, border: "none", background: "#2563eb",
-    color: "#fff", fontSize: 16, fontWeight: 600, cursor: "pointer",
+    padding: "14px 0", borderRadius: 10, border: "none",
+    background: "var(--gold)", color: "#0a0c14", fontSize: 15,
+    fontWeight: 700, cursor: "pointer", fontFamily: "var(--font-body)",
+    letterSpacing: "0.03em", textTransform: "uppercase" as const,
   },
 };

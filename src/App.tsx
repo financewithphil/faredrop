@@ -26,6 +26,7 @@ export default function App() {
 
   return (
     <div style={styles.layout}>
+      <div className="ambient-bg" />
       <Header onLogout={() => setLoggedIn(false)} />
       <main style={styles.main}>
         {view === "baggage_claim" && selectedId ? (
@@ -72,8 +73,9 @@ const styles: Record<string, React.CSSProperties> = {
     minHeight: "100vh",
     display: "flex",
     flexDirection: "column",
-    background: "#0f172a",
-    color: "#f1f5f9",
+    background: "var(--bg-base)",
+    color: "var(--text-primary)",
+    position: "relative",
   },
   main: {
     flex: 1,

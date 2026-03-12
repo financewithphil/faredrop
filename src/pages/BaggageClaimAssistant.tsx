@@ -144,11 +144,10 @@ export function BaggageClaimAssistant({
   const currentStatusIdx = STATUS_FLOW.indexOf(claim.status);
 
   return (
-    <div style={styles.container}>
+    <div className="animate-in" style={styles.container}>
       <button onClick={onBack} style={styles.backBtn}>&larr; Back</button>
 
-      {/* Header */}
-      <div style={styles.card}>
+      <div className="glass-card-static" style={styles.card}>
         <div style={styles.typeBadge}>
           {CLAIM_TYPE_LABELS[claim.claim_type] || claim.claim_type}
         </div>
@@ -156,7 +155,13 @@ export function BaggageClaimAssistant({
           {claim.origin && claim.destination ? (
             <>
               <span style={styles.airport}>{claim.origin}</span>
-              <span style={styles.arrow}>&rarr;</span>
+              <span style={styles.routeLine}>
+                <span style={styles.routeDot} />
+                <span style={styles.routeDash} />
+                <span style={styles.routePlane}>&#9992;</span>
+                <span style={styles.routeDash} />
+                <span style={styles.routeDot} />
+              </span>
               <span style={styles.airport}>{claim.destination}</span>
             </>
           ) : (
@@ -165,7 +170,9 @@ export function BaggageClaimAssistant({
         </div>
         <div style={styles.metaRow}>
           {claim.flight_number && <span>{claim.flight_number}</span>}
+          {claim.flight_number && claim.flight_date && <span style={styles.metaDot} />}
           {claim.flight_date && <span>{claim.flight_date}</span>}
+          <span style={styles.metaDot} />
           <span>{claim.is_international ? "International" : "Domestic"}</span>
         </div>
 
@@ -176,17 +183,16 @@ export function BaggageClaimAssistant({
           </div>
           <div style={styles.infoBlock}>
             <span style={styles.infoLabel}>Max Compensation</span>
-            <span style={styles.infoValue}>${maxComp.toLocaleString()}</span>
+            <span style={{ ...styles.infoValue, color: "var(--gold)" }}>${maxComp.toLocaleString()}</span>
           </div>
           <div style={styles.infoBlock}>
-            <span style={styles.infoLabel}>Processing Time</span>
+            <span style={styles.infoLabel}>Processing</span>
             <span style={styles.infoValue}>{claim.policy.processingDays}</span>
           </div>
         </div>
       </div>
 
-      {/* Status Tracker */}
-      <div style={styles.card}>
+      <div className="glass-card-static animate-in animate-in-1" style={styles.card}>
         <h3 style={styles.sectionTitle}>Claim Status</h3>
         <div style={styles.statusTrack}>
           {STATUS_FLOW.map((s, i) => {
@@ -196,12 +202,13 @@ export function BaggageClaimAssistant({
               <div key={s} style={styles.statusStep}>
                 <div style={{
                   ...styles.statusDot,
-                  background: isActive ? "#2563eb" : "#334155",
-                  border: isCurrent ? "2px solid #60a5fa" : "2px solid transparent",
+                  background: isActive ? "var(--gold)" : "rgba(255,255,255,0.08)",
+                  border: isCurrent ? "2px solid var(--gold)" : "2px solid transparent",
+                  boxShadow: isCurrent ? "0 0 12px rgba(212, 168, 83, 0.3)" : "none",
                 }} />
                 <span style={{
                   ...styles.statusLabel,
-                  color: isActive ? "#e2e8f0" : "#64748b",
+                  color: isActive ? "var(--text-primary)" : "var(--text-muted)",
                   fontWeight: isCurrent ? 700 : 400,
                 }}>
                   {STATUS_LABELS[s]}
@@ -209,7 +216,7 @@ export function BaggageClaimAssistant({
                 {i < STATUS_FLOW.length - 1 && (
                   <div style={{
                     ...styles.statusLine,
-                    background: i < currentStatusIdx ? "#2563eb" : "#334155",
+                    background: i < currentStatusIdx ? "var(--gold)" : "rgba(255,255,255,0.06)",
                   }} />
                 )}
               </div>
@@ -235,10 +242,10 @@ export function BaggageClaimAssistant({
             )}
             {claim.status === "under_review" && (
               <>
-                <button onClick={() => updateClaim({ status: "resolved" })} disabled={saving} style={{ ...styles.actionBtn, background: "#16a34a" }}>
+                <button onClick={() => updateClaim({ status: "resolved" })} disabled={saving} style={{ ...styles.actionBtn, background: "var(--green)" }}>
                   Resolved
                 </button>
-                <button onClick={() => setShowDot(true)} style={{ ...styles.actionBtn, background: "#dc2626" }}>
+                <button onClick={() => setShowDot(true)} style={{ ...styles.actionBtn, background: "var(--red)" }}>
                   Escalate to DOT
                 </button>
               </>
@@ -246,14 +253,13 @@ export function BaggageClaimAssistant({
           </div>
         )}
         {claim.status === "escalated_dot" && (
-          <p style={{ color: "#fbbf24", fontSize: 13, textAlign: "center", marginTop: 8 }}>
+          <p style={{ color: "var(--gold)", fontSize: 13, textAlign: "center", marginTop: 10, fontFamily: "var(--font-body)" }}>
             DOT complaint filed — airline must respond within 60 days
           </p>
         )}
       </div>
 
-      {/* Step-by-step Guide */}
-      <div style={styles.card}>
+      <div className="glass-card-static animate-in animate-in-2" style={styles.card}>
         <h3 style={styles.sectionTitle}>
           Step-by-Step: {CLAIM_TYPE_LABELS[claim.claim_type]}
         </h3>
@@ -263,15 +269,15 @@ export function BaggageClaimAssistant({
             <div key={i} style={styles.stepItem} onClick={() => toggleStep(i)}>
               <div style={{
                 ...styles.stepCheck,
-                background: completedSteps.has(i) ? "#2563eb" : "transparent",
-                borderColor: completedSteps.has(i) ? "#2563eb" : "#475569",
+                background: completedSteps.has(i) ? "var(--gold)" : "transparent",
+                borderColor: completedSteps.has(i) ? "var(--gold)" : "rgba(255,255,255,0.12)",
               }}>
-                {completedSteps.has(i) && <span style={{ color: "#fff", fontSize: 12 }}>&#10003;</span>}
+                {completedSteps.has(i) && <span style={{ color: "#0a0c14", fontSize: 12, fontWeight: 700 }}>&#10003;</span>}
               </div>
               <span style={{
                 ...styles.stepText,
                 textDecoration: completedSteps.has(i) ? "line-through" : "none",
-                opacity: completedSteps.has(i) ? 0.6 : 1,
+                opacity: completedSteps.has(i) ? 0.5 : 1,
               }}>
                 {step}
               </span>
@@ -292,25 +298,27 @@ export function BaggageClaimAssistant({
         </div>
       </div>
 
-      {/* Required Documentation */}
-      <div style={styles.card}>
+      <div className="glass-card-static animate-in animate-in-3" style={styles.card}>
         <h3 style={styles.sectionTitle}>Required Documentation</h3>
         <div style={styles.docList}>
           {claim.policy.documentation.map((doc, i) => (
             <div key={i} style={styles.docItem}>
-              <span style={styles.docBullet}>&#9679;</span>
+              <span style={styles.docBullet} />
               <span style={styles.docText}>{doc}</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Items List */}
-      <div style={styles.card}>
+      <div className="glass-card-static animate-in animate-in-4" style={styles.card}>
         <h3 style={styles.sectionTitle}>
-          Items in Bag {claim.estimated_value ? `($${claim.estimated_value.toFixed(0)} total)` : ""}
+          Items in Bag {claim.estimated_value ? (
+            <span style={{ color: "var(--gold)", fontFamily: "var(--font-mono)", fontSize: 14 }}>
+              ${claim.estimated_value.toFixed(0)}
+            </span>
+          ) : ""}
         </h3>
-        <p style={{ fontSize: 13, color: "#64748b", marginBottom: 12 }}>
+        <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 14, fontFamily: "var(--font-body)" }}>
           List items and their approximate value for your claim.
         </p>
         {items.map((item, i) => (
@@ -334,7 +342,7 @@ export function BaggageClaimAssistant({
             )}
           </div>
         ))}
-        <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+        <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
           <button onClick={addItem} style={styles.addItemBtn}>+ Add Item</button>
           <button onClick={saveItems} disabled={saving} style={styles.saveBtn}>
             {saving ? "Saving..." : "Save Items"}
@@ -342,8 +350,7 @@ export function BaggageClaimAssistant({
         </div>
       </div>
 
-      {/* File Reference & Notes */}
-      <div style={styles.card}>
+      <div className="glass-card-static animate-in animate-in-5" style={styles.card}>
         <h3 style={styles.sectionTitle}>Your Notes</h3>
         <input
           type="text"
@@ -377,33 +384,31 @@ export function BaggageClaimAssistant({
         </button>
       </div>
 
-      {/* Tips */}
       {claim.policy.tips && claim.policy.tips.length > 0 && (
         <div style={styles.tipsBox}>
           <h4 style={styles.tipsTitle}>Tips</h4>
           {claim.policy.tips.map((tip, i) => (
-            <p key={i} style={styles.tipText}>&#8226; {tip}</p>
+            <p key={i} style={styles.tipText}>{tip}</p>
           ))}
         </div>
       )}
 
-      {/* DOT Escalation Modal */}
       {showDot && (
         <div style={styles.overlay} onClick={() => setShowDot(false)}>
-          <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
+          <div className="glass-card-static animate-in" style={styles.modal} onClick={(e) => e.stopPropagation()}>
             <h3 style={styles.modalTitle}>Escalate to DOT</h3>
-            <p style={{ fontSize: 14, color: "#94a3b8", marginBottom: 16 }}>
+            <p style={{ fontSize: 14, color: "var(--text-secondary)", marginBottom: 18, fontFamily: "var(--font-body)" }}>
               If the airline hasn't resolved your claim, you can file a complaint with the US Department of Transportation.
             </p>
             <div style={styles.stepsList}>
               {claim.regulations.dot.steps.map((step, i) => (
                 <div key={i} style={styles.docItem}>
-                  <span style={styles.docBullet}>{i + 1}.</span>
-                  <span style={styles.docText}>{step}</span>
+                  <span style={{ ...styles.docBullet, background: "var(--gold)" }} />
+                  <span style={styles.docText}>{i + 1}. {step}</span>
                 </div>
               ))}
             </div>
-            <div style={{ display: "flex", gap: 8, marginTop: 20 }}>
+            <div style={{ display: "flex", gap: 10, marginTop: 22 }}>
               <a
                 href={claim.regulations.dot.complaintUrl}
                 target="_blank"
@@ -422,7 +427,7 @@ export function BaggageClaimAssistant({
                 setShowDot(false);
               }}
               disabled={saving}
-              style={{ ...styles.saveBtn, width: "100%", marginTop: 12 }}
+              style={{ ...styles.saveBtn, width: "100%", marginTop: 14 }}
             >
               Mark as Escalated to DOT
             </button>
@@ -430,16 +435,15 @@ export function BaggageClaimAssistant({
         </div>
       )}
 
-      {/* Compensation Info */}
-      <div style={styles.infoBox}>
-        <h4 style={styles.infoBoxTitle}>Compensation Limits</h4>
-        <p style={styles.infoBoxText}>
+      <div style={styles.compBox}>
+        <h4 style={styles.compTitle}>Compensation Limits</h4>
+        <p style={styles.compText}>
           <strong>Domestic:</strong> Up to $4,700 per passenger (US DOT regulation)
         </p>
-        <p style={styles.infoBoxText}>
+        <p style={styles.compText}>
           <strong>International:</strong> Up to ~$2,175 per passenger (Montreal Convention, 1,519 SDR)
         </p>
-        <p style={styles.infoBoxText}>
+        <p style={styles.compText}>
           Airlines must also refund checked bag fees for lost bags. Compensation is based on depreciated value.
         </p>
       </div>
@@ -448,101 +452,194 @@ export function BaggageClaimAssistant({
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  container: { padding: 20, maxWidth: 600, margin: "0 auto" },
-  loading: { flex: 1, display: "flex", alignItems: "center", justifyContent: "center", color: "#94a3b8" },
-  backBtn: { background: "none", border: "none", color: "#3b82f6", fontSize: 14, cursor: "pointer", marginBottom: 16, padding: 0 },
-  card: { background: "#1e293b", borderRadius: 12, padding: 20, marginBottom: 16, border: "1px solid #334155" },
-  typeBadge: {
-    display: "inline-block", padding: "4px 12px", borderRadius: 20,
-    background: "#1e3a5f", color: "#93c5fd", fontSize: 13, fontWeight: 600, marginBottom: 12,
+  container: { padding: 24, maxWidth: 640, margin: "0 auto", width: "100%" },
+  loading: {
+    flex: 1, display: "flex", alignItems: "center", justifyContent: "center",
+    color: "var(--text-secondary)", fontFamily: "var(--font-body)",
   },
-  route: { display: "flex", alignItems: "center", gap: 12, marginBottom: 8 },
-  airport: { fontSize: 28, fontWeight: 700, color: "#f1f5f9" },
-  arrow: { fontSize: 20, color: "#64748b" },
-  metaRow: { display: "flex", gap: 12, fontSize: 13, color: "#94a3b8", marginBottom: 16 },
+  backBtn: {
+    background: "none", border: "none", color: "var(--gold)",
+    fontSize: 14, cursor: "pointer", marginBottom: 20, padding: 0,
+    fontFamily: "var(--font-body)", fontWeight: 500,
+  },
+  card: { padding: 24, marginBottom: 18 },
+  typeBadge: {
+    display: "inline-block", padding: "5px 14px", borderRadius: 100,
+    background: "var(--indigo-dim)", color: "var(--indigo)",
+    fontSize: 12, fontWeight: 700, marginBottom: 14,
+    fontFamily: "var(--font-body)", letterSpacing: "0.04em",
+    textTransform: "uppercase" as const,
+  },
+  route: { display: "flex", alignItems: "center", gap: 14, marginBottom: 10 },
+  airport: {
+    fontSize: 30, fontWeight: 700, color: "var(--text-primary)",
+    fontFamily: "var(--font-display)", letterSpacing: "-0.02em",
+  },
+  routeLine: { display: "flex", alignItems: "center", gap: 4, opacity: 0.4 },
+  routeDot: { width: 5, height: 5, borderRadius: "50%", background: "var(--gold)" },
+  routeDash: { width: 22, height: 1, background: "var(--text-muted)" },
+  routePlane: { fontSize: 12, color: "var(--gold)" },
+  metaRow: {
+    display: "flex", alignItems: "center", gap: 8,
+    fontSize: 13, color: "var(--text-secondary)", marginBottom: 18,
+    fontFamily: "var(--font-body)",
+  },
+  metaDot: { width: 3, height: 3, borderRadius: "50%", background: "var(--text-muted)" },
   infoRow: { display: "flex", gap: 12, flexWrap: "wrap" },
   infoBlock: {
-    flex: 1, minWidth: 120, background: "#0f172a", borderRadius: 8, padding: 12, textAlign: "center",
+    flex: 1, minWidth: 120, background: "rgba(0,0,0,0.3)",
+    borderRadius: 10, padding: 14, textAlign: "center",
+    border: "1px solid var(--border)",
   },
-  infoLabel: { display: "block", fontSize: 11, color: "#64748b", textTransform: "uppercase" as const, marginBottom: 4 },
-  infoValue: { display: "block", fontSize: 15, fontWeight: 600, color: "#e2e8f0" },
-  sectionTitle: { fontSize: 16, fontWeight: 600, color: "#e2e8f0", marginBottom: 16 },
-  statusTrack: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 },
-  statusStep: { display: "flex", flexDirection: "column", alignItems: "center", position: "relative", flex: 1 },
-  statusDot: { width: 16, height: 16, borderRadius: "50%", marginBottom: 6 },
-  statusLabel: { fontSize: 10, textAlign: "center" },
-  statusLine: { position: "absolute", top: 7, left: "60%", right: "-40%", height: 2 },
-  statusActions: { display: "flex", gap: 8, justifyContent: "center" },
-  actionBtn: { padding: "8px 20px", borderRadius: 8, border: "none", background: "#2563eb", color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer" },
-  policyName: { fontSize: 14, color: "#94a3b8", marginBottom: 12 },
-  stepsList: { display: "flex", flexDirection: "column", gap: 12 },
-  stepItem: { display: "flex", alignItems: "flex-start", gap: 12, cursor: "pointer" },
+  infoLabel: {
+    display: "block", fontSize: 10, color: "var(--text-muted)",
+    textTransform: "uppercase" as const, marginBottom: 5,
+    letterSpacing: "0.08em", fontWeight: 600, fontFamily: "var(--font-body)",
+  },
+  infoValue: {
+    display: "block", fontSize: 14, fontWeight: 600, color: "var(--text-primary)",
+    fontFamily: "var(--font-mono)",
+  },
+  sectionTitle: {
+    fontSize: 16, fontWeight: 600, color: "var(--text-primary)",
+    marginBottom: 18, fontFamily: "var(--font-display)",
+  },
+  statusTrack: {
+    display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18,
+  },
+  statusStep: {
+    display: "flex", flexDirection: "column", alignItems: "center",
+    position: "relative", flex: 1,
+  },
+  statusDot: {
+    width: 18, height: 18, borderRadius: "50%", marginBottom: 8,
+    transition: "all 0.3s ease",
+  },
+  statusLabel: {
+    fontSize: 10, textAlign: "center", fontFamily: "var(--font-body)",
+    letterSpacing: "0.02em",
+  },
+  statusLine: {
+    position: "absolute", top: 8, left: "60%", right: "-40%", height: 2,
+    transition: "background 0.3s ease",
+  },
+  statusActions: { display: "flex", gap: 10, justifyContent: "center" },
+  actionBtn: {
+    padding: "10px 24px", borderRadius: 10, border: "none",
+    background: "var(--gold)", color: "#0a0c14", fontSize: 13,
+    fontWeight: 700, cursor: "pointer", fontFamily: "var(--font-body)",
+    letterSpacing: "0.03em", textTransform: "uppercase" as const,
+  },
+  policyName: {
+    fontSize: 13, color: "var(--text-secondary)", marginBottom: 14,
+    fontFamily: "var(--font-body)",
+  },
+  stepsList: { display: "flex", flexDirection: "column", gap: 14 },
+  stepItem: { display: "flex", alignItems: "flex-start", gap: 14, cursor: "pointer" },
   stepCheck: {
-    width: 22, height: 22, minWidth: 22, borderRadius: 4,
-    border: "2px solid #475569", display: "flex", alignItems: "center", justifyContent: "center", marginTop: 1,
+    width: 24, height: 24, minWidth: 24, borderRadius: 6,
+    border: "2px solid rgba(255,255,255,0.12)", display: "flex",
+    alignItems: "center", justifyContent: "center", marginTop: 1,
+    transition: "all 0.2s ease",
   },
-  stepText: { fontSize: 14, color: "#e2e8f0", lineHeight: "1.5" },
-  actionLinks: { display: "flex", gap: 8, marginTop: 20, flexWrap: "wrap" },
+  stepText: {
+    fontSize: 14, color: "var(--text-primary)", lineHeight: "1.6",
+    fontFamily: "var(--font-body)", transition: "opacity 0.2s ease",
+  },
+  actionLinks: { display: "flex", gap: 10, marginTop: 22, flexWrap: "wrap" },
   linkBtn: {
-    padding: "10px 20px", borderRadius: 8, background: "#2563eb",
-    color: "#fff", fontSize: 14, fontWeight: 600, textDecoration: "none",
+    padding: "11px 22px", borderRadius: 10, background: "var(--gold)",
+    color: "#0a0c14", fontSize: 13, fontWeight: 700,
+    textDecoration: "none", fontFamily: "var(--font-body)",
+    letterSpacing: "0.03em", textTransform: "uppercase" as const,
   },
   phoneBtn: {
-    padding: "10px 20px", borderRadius: 8, border: "1px solid #334155",
-    background: "#1e293b", color: "#e2e8f0", fontSize: 14, fontWeight: 600, textDecoration: "none",
+    padding: "11px 22px", borderRadius: 10, border: "1px solid var(--border-hover)",
+    background: "transparent", color: "var(--text-secondary)", fontSize: 13,
+    fontWeight: 600, textDecoration: "none", fontFamily: "var(--font-body)",
   },
-  docList: { display: "flex", flexDirection: "column", gap: 8 },
-  docItem: { display: "flex", alignItems: "flex-start", gap: 8 },
-  docBullet: { color: "#64748b", fontSize: 8, marginTop: 5, flexShrink: 0 },
-  docText: { fontSize: 14, color: "#cbd5e1", lineHeight: "1.5" },
-  itemRow: { display: "flex", gap: 8, marginBottom: 8, alignItems: "center" },
+  docList: { display: "flex", flexDirection: "column", gap: 10 },
+  docItem: { display: "flex", alignItems: "flex-start", gap: 10 },
+  docBullet: {
+    width: 6, height: 6, borderRadius: "50%", background: "var(--text-muted)",
+    marginTop: 7, flexShrink: 0,
+  },
+  docText: {
+    fontSize: 14, color: "var(--text-secondary)", lineHeight: "1.6",
+    fontFamily: "var(--font-body)",
+  },
+  itemRow: { display: "flex", gap: 10, marginBottom: 10, alignItems: "center" },
   input: {
-    padding: "8px 12px", borderRadius: 8, border: "1px solid #334155",
-    background: "#0f172a", color: "#f1f5f9", fontSize: 14, outline: "none",
-    boxSizing: "border-box" as const,
+    padding: "10px 14px", borderRadius: 10, border: "1px solid var(--border)",
+    background: "var(--bg-input)", color: "var(--text-primary)", fontSize: 14,
+    outline: "none", boxSizing: "border-box" as const, fontFamily: "var(--font-body)",
   },
   inputFull: {
-    width: "100%", padding: "10px 12px", borderRadius: 8, border: "1px solid #334155",
-    background: "#0f172a", color: "#f1f5f9", fontSize: 14, outline: "none", marginBottom: 10,
-    boxSizing: "border-box" as const,
+    width: "100%", padding: "12px 14px", borderRadius: 10,
+    border: "1px solid var(--border)", background: "var(--bg-input)",
+    color: "var(--text-primary)", fontSize: 14, outline: "none", marginBottom: 12,
+    boxSizing: "border-box" as const, fontFamily: "var(--font-body)",
   },
   textarea: {
-    width: "100%", padding: "10px 12px", borderRadius: 8, border: "1px solid #334155",
-    background: "#0f172a", color: "#f1f5f9", fontSize: 14, fontFamily: "inherit",
-    resize: "vertical" as const, outline: "none", marginBottom: 10, boxSizing: "border-box" as const,
+    width: "100%", padding: "12px 14px", borderRadius: 10,
+    border: "1px solid var(--border)", background: "var(--bg-input)",
+    color: "var(--text-primary)", fontSize: 14, fontFamily: "var(--font-body)",
+    resize: "vertical" as const, outline: "none", marginBottom: 12,
+    boxSizing: "border-box" as const,
   },
   removeBtn: {
-    width: 28, height: 28, borderRadius: 6, border: "1px solid #7f1d1d",
-    background: "transparent", color: "#f87171", fontSize: 14, cursor: "pointer",
+    width: 30, height: 30, borderRadius: 8, border: "1px solid rgba(248, 113, 113, 0.2)",
+    background: "transparent", color: "var(--red)", fontSize: 14, cursor: "pointer",
     display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
   },
   addItemBtn: {
-    padding: "6px 14px", borderRadius: 8, border: "1px solid #334155",
-    background: "transparent", color: "#94a3b8", fontSize: 13, cursor: "pointer",
+    padding: "8px 16px", borderRadius: 10, border: "1px solid var(--border)",
+    background: "transparent", color: "var(--text-secondary)", fontSize: 13,
+    cursor: "pointer", fontFamily: "var(--font-body)",
   },
   saveBtn: {
-    padding: "8px 16px", borderRadius: 8, border: "1px solid #334155",
-    background: "#1e293b", color: "#e2e8f0", fontSize: 14, fontWeight: 600, cursor: "pointer",
+    padding: "9px 20px", borderRadius: 10, border: "1px solid var(--border-hover)",
+    background: "transparent", color: "var(--text-secondary)", fontSize: 13,
+    fontWeight: 600, cursor: "pointer", fontFamily: "var(--font-body)",
   },
   tipsBox: {
-    background: "#1a1a2e", border: "1px solid #334155", borderRadius: 8,
-    padding: 16, marginBottom: 16,
+    background: "rgba(56, 189, 248, 0.04)", border: "1px solid rgba(56, 189, 248, 0.12)",
+    borderRadius: 12, padding: 18, marginBottom: 18,
   },
-  tipsTitle: { fontSize: 14, fontWeight: 600, color: "#60a5fa", marginBottom: 8 },
-  tipText: { fontSize: 13, color: "#94a3b8", marginBottom: 4 },
-  infoBox: {
-    background: "#1a1a2e", border: "1px solid #334155", borderRadius: 8,
-    padding: 16, marginBottom: 16,
+  tipsTitle: {
+    fontSize: 12, fontWeight: 700, color: "var(--cyan)", marginBottom: 10,
+    fontFamily: "var(--font-body)", letterSpacing: "0.06em",
+    textTransform: "uppercase" as const,
   },
-  infoBoxTitle: { fontSize: 14, fontWeight: 600, color: "#fbbf24", marginBottom: 8 },
-  infoBoxText: { fontSize: 13, color: "#94a3b8", marginBottom: 6, lineHeight: "1.5" },
+  tipText: {
+    fontSize: 13, color: "var(--text-secondary)", marginBottom: 6,
+    fontFamily: "var(--font-body)", lineHeight: 1.5,
+    paddingLeft: 14,
+    borderLeft: "2px solid rgba(56, 189, 248, 0.15)",
+  },
+  compBox: {
+    background: "rgba(212, 168, 83, 0.04)", border: "1px solid rgba(212, 168, 83, 0.12)",
+    borderRadius: 12, padding: 18, marginBottom: 18,
+  },
+  compTitle: {
+    fontSize: 12, fontWeight: 700, color: "var(--gold)", marginBottom: 10,
+    fontFamily: "var(--font-body)", letterSpacing: "0.06em",
+    textTransform: "uppercase" as const,
+  },
+  compText: {
+    fontSize: 13, color: "var(--text-secondary)", marginBottom: 8,
+    fontFamily: "var(--font-body)", lineHeight: 1.6,
+  },
   overlay: {
-    position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)",
-    display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 16,
+    position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)",
+    backdropFilter: "blur(4px)", display: "flex", alignItems: "center",
+    justifyContent: "center", zIndex: 100, padding: 16,
   },
   modal: {
-    background: "#1e293b", borderRadius: 12, padding: 24,
-    width: "100%", maxWidth: 500, border: "1px solid #334155",
+    padding: 28, width: "100%", maxWidth: 520,
   },
-  modalTitle: { fontSize: 18, fontWeight: 700, color: "#f1f5f9", marginBottom: 4 },
+  modalTitle: {
+    fontSize: 20, fontWeight: 700, color: "var(--text-primary)", marginBottom: 6,
+    fontFamily: "var(--font-display)",
+  },
 };

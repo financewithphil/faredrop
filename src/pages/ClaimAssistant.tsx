@@ -92,24 +92,29 @@ export function ClaimAssistant({
       claim.fare_class.toLowerCase() === "basic_economy");
 
   return (
-    <div style={styles.container}>
+    <div className="animate-in" style={styles.container}>
       <button onClick={onBack} style={styles.backBtn}>
         &larr; Back
       </button>
 
-      {/* Header */}
-      <div style={styles.card}>
+      <div className="glass-card-static" style={styles.card}>
         <div style={styles.route}>
           <span style={styles.airport}>{claim.origin}</span>
-          <span style={styles.arrow}>&rarr;</span>
+          <span style={styles.routeLine}>
+            <span style={styles.routeDot} />
+            <span style={styles.routeDash} />
+            <span style={styles.routePlane}>&#9992;</span>
+            <span style={styles.routeDash} />
+            <span style={styles.routeDot} />
+          </span>
           <span style={styles.airport}>{claim.destination}</span>
         </div>
         <div style={styles.airlineRow}>
-          <span style={styles.airlineName}>
-            {claim.airline || claim.policy.name}
-          </span>
-          <span style={styles.flightNum}>{claim.flight_number}</span>
-          <span style={styles.date}>{claim.departure_date}</span>
+          <span>{claim.airline || claim.policy.name}</span>
+          <span style={styles.metaDot} />
+          <span>{claim.flight_number}</span>
+          <span style={styles.metaDot} />
+          <span>{claim.departure_date}</span>
         </div>
 
         <div style={styles.savingsBox}>
@@ -123,8 +128,7 @@ export function ClaimAssistant({
         </div>
       </div>
 
-      {/* Status Tracker */}
-      <div style={styles.card}>
+      <div className="glass-card-static animate-in animate-in-1" style={styles.card}>
         <h3 style={styles.sectionTitle}>Claim Status</h3>
         <div style={styles.statusTrack}>
           {STATUS_FLOW.map((s, i) => {
@@ -136,14 +140,15 @@ export function ClaimAssistant({
                 <div
                   style={{
                     ...styles.statusDot,
-                    background: isActive ? "#2563eb" : "#334155",
-                    border: isCurrent ? "2px solid #60a5fa" : "2px solid transparent",
+                    background: isActive ? "var(--gold)" : "rgba(255,255,255,0.08)",
+                    border: isCurrent ? "2px solid var(--gold)" : "2px solid transparent",
+                    boxShadow: isCurrent ? "0 0 12px rgba(212, 168, 83, 0.3)" : "none",
                   }}
                 />
                 <span
                   style={{
                     ...styles.statusLabel,
-                    color: isActive ? "#e2e8f0" : "#64748b",
+                    color: isActive ? "var(--text-primary)" : "var(--text-muted)",
                     fontWeight: isCurrent ? 700 : 400,
                   }}
                 >
@@ -153,7 +158,7 @@ export function ClaimAssistant({
                   <div
                     style={{
                       ...styles.statusLine,
-                      background: i < currentIdx ? "#2563eb" : "#334155",
+                      background: i < currentIdx ? "var(--gold)" : "rgba(255,255,255,0.06)",
                     }}
                   />
                 )}
@@ -186,14 +191,14 @@ export function ClaimAssistant({
                 <button
                   onClick={() => updateClaim({ status: "approved" })}
                   disabled={saving}
-                  style={{ ...styles.actionBtn, background: "#16a34a" }}
+                  style={{ ...styles.actionBtn, background: "var(--green)" }}
                 >
                   Credit Received
                 </button>
                 <button
                   onClick={() => updateClaim({ status: "denied" })}
                   disabled={saving}
-                  style={{ ...styles.actionBtn, background: "#dc2626" }}
+                  style={{ ...styles.actionBtn, background: "var(--red)" }}
                 >
                   Denied
                 </button>
@@ -203,9 +208,8 @@ export function ClaimAssistant({
         )}
       </div>
 
-      {/* Eligibility Warning */}
       {isBasicEconomy && claim.policy.basicEconomyEligible === false && (
-        <div style={styles.warningBox}>
+        <div className="animate-in animate-in-2" style={styles.warningBox}>
           <strong>Heads up:</strong> Your fare class appears to be Basic
           Economy. {claim.policy.name} typically does not allow changes on
           Basic Economy tickets. You may still try contacting the airline
@@ -213,8 +217,7 @@ export function ClaimAssistant({
         </div>
       )}
 
-      {/* Step-by-step Guide */}
-      <div style={styles.card}>
+      <div className="glass-card-static animate-in animate-in-2" style={styles.card}>
         <h3 style={styles.sectionTitle}>How to File Your Claim</h3>
         <p style={styles.policyName}>{claim.policy.name}</p>
         <div style={styles.stepsList}>
@@ -227,19 +230,19 @@ export function ClaimAssistant({
               <div
                 style={{
                   ...styles.stepCheck,
-                  background: completedSteps.has(i) ? "#2563eb" : "transparent",
-                  borderColor: completedSteps.has(i) ? "#2563eb" : "#475569",
+                  background: completedSteps.has(i) ? "var(--gold)" : "transparent",
+                  borderColor: completedSteps.has(i) ? "var(--gold)" : "rgba(255,255,255,0.12)",
                 }}
               >
                 {completedSteps.has(i) && (
-                  <span style={{ color: "#fff", fontSize: 12 }}>&#10003;</span>
+                  <span style={{ color: "#0a0c14", fontSize: 12, fontWeight: 700 }}>&#10003;</span>
                 )}
               </div>
               <span
                 style={{
                   ...styles.stepText,
                   textDecoration: completedSteps.has(i) ? "line-through" : "none",
-                  opacity: completedSteps.has(i) ? 0.6 : 1,
+                  opacity: completedSteps.has(i) ? 0.5 : 1,
                 }}
               >
                 {step}
@@ -262,9 +265,8 @@ export function ClaimAssistant({
         </div>
       </div>
 
-      {/* Restrictions */}
       {claim.policy.restrictions.length > 0 && (
-        <div style={styles.infoBox}>
+        <div className="animate-in animate-in-3" style={styles.infoBox}>
           <h4 style={styles.infoTitle}>Important Notes</h4>
           <ul style={styles.restrictionsList}>
             {claim.policy.restrictions.map((r, i) => (
@@ -272,14 +274,13 @@ export function ClaimAssistant({
             ))}
           </ul>
           <p style={styles.expiryNote}>
-            Credit expires: <strong>{claim.policy.creditExpiry}</strong> from
+            Credit expires: <strong style={{ color: "var(--gold)" }}>{claim.policy.creditExpiry}</strong> from
             issue date
           </p>
         </div>
       )}
 
-      {/* Notes & Reference */}
-      <div style={styles.card}>
+      <div className="glass-card-static animate-in animate-in-4" style={styles.card}>
         <h3 style={styles.sectionTitle}>Your Notes</h3>
         <input
           type="text"
@@ -308,118 +309,165 @@ export function ClaimAssistant({
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  container: { padding: 20, maxWidth: 600, margin: "0 auto" },
+  container: { padding: 24, maxWidth: 640, margin: "0 auto", width: "100%" },
   loading: {
     flex: 1, display: "flex", alignItems: "center", justifyContent: "center",
-    color: "#94a3b8",
+    color: "var(--text-secondary)", fontFamily: "var(--font-body)",
   },
   backBtn: {
-    background: "none", border: "none", color: "#3b82f6",
-    fontSize: 14, cursor: "pointer", marginBottom: 16, padding: 0,
+    background: "none", border: "none", color: "var(--gold)",
+    fontSize: 14, cursor: "pointer", marginBottom: 20, padding: 0,
+    fontFamily: "var(--font-body)", fontWeight: 500,
   },
-  card: {
-    background: "#1e293b", borderRadius: 12, padding: 20,
-    marginBottom: 16, border: "1px solid #334155",
-  },
+  card: { padding: 24, marginBottom: 18 },
   route: {
-    display: "flex", alignItems: "center", gap: 12,
-    marginBottom: 8,
+    display: "flex", alignItems: "center", gap: 14, marginBottom: 10,
   },
-  airport: { fontSize: 28, fontWeight: 700, color: "#f1f5f9" },
-  arrow: { fontSize: 20, color: "#64748b" },
+  airport: {
+    fontSize: 30, fontWeight: 700, color: "var(--text-primary)",
+    fontFamily: "var(--font-display)", letterSpacing: "-0.02em",
+  },
+  routeLine: { display: "flex", alignItems: "center", gap: 4, opacity: 0.4 },
+  routeDot: { width: 5, height: 5, borderRadius: "50%", background: "var(--gold)" },
+  routeDash: { width: 22, height: 1, background: "var(--text-muted)" },
+  routePlane: { fontSize: 12, color: "var(--gold)" },
   airlineRow: {
-    display: "flex", gap: 12, fontSize: 13, color: "#94a3b8",
-    marginBottom: 16,
+    display: "flex", alignItems: "center", gap: 8,
+    fontSize: 13, color: "var(--text-secondary)", marginBottom: 18,
+    fontFamily: "var(--font-body)",
   },
-  airlineName: {},
-  flightNum: {},
-  date: {},
+  metaDot: {
+    width: 3, height: 3, borderRadius: "50%", background: "var(--text-muted)",
+  },
   savingsBox: {
-    background: "#052e16", borderRadius: 8, padding: 16,
-    textAlign: "center",
+    background: "rgba(212, 168, 83, 0.06)", borderRadius: 12, padding: 20,
+    textAlign: "center", border: "1px solid rgba(212, 168, 83, 0.15)",
   },
-  savingsAmount: { fontSize: 36, fontWeight: 700, color: "#4ade80" },
-  savingsLabel: { fontSize: 13, color: "#86efac", marginBottom: 8 },
-  priceCompare: { display: "flex", justifyContent: "center", gap: 8, fontSize: 16 },
-  pricePaid: { color: "#f87171", textDecoration: "line-through" },
-  priceArrow: { color: "#64748b" },
-  priceFound: { color: "#4ade80", fontWeight: 600 },
-  sectionTitle: { fontSize: 16, fontWeight: 600, color: "#e2e8f0", marginBottom: 16 },
+  savingsAmount: {
+    fontSize: 40, fontWeight: 700, color: "var(--gold)",
+    fontFamily: "var(--font-mono)", letterSpacing: "-0.03em",
+  },
+  savingsLabel: {
+    fontSize: 12, color: "var(--text-secondary)", marginBottom: 10,
+    fontFamily: "var(--font-body)", letterSpacing: "0.06em",
+    textTransform: "uppercase" as const,
+  },
+  priceCompare: {
+    display: "flex", justifyContent: "center", gap: 10, fontSize: 16,
+  },
+  pricePaid: {
+    color: "var(--red)", textDecoration: "line-through",
+    fontFamily: "var(--font-mono)",
+  },
+  priceArrow: { color: "var(--text-muted)" },
+  priceFound: {
+    color: "var(--green)", fontWeight: 600,
+    fontFamily: "var(--font-mono)",
+  },
+  sectionTitle: {
+    fontSize: 16, fontWeight: 600, color: "var(--text-primary)",
+    marginBottom: 18, fontFamily: "var(--font-display)",
+  },
   statusTrack: {
     display: "flex", alignItems: "center", justifyContent: "space-between",
-    marginBottom: 16,
+    marginBottom: 18,
   },
   statusStep: {
     display: "flex", flexDirection: "column", alignItems: "center",
     position: "relative", flex: 1,
   },
   statusDot: {
-    width: 16, height: 16, borderRadius: "50%", marginBottom: 6,
+    width: 18, height: 18, borderRadius: "50%", marginBottom: 8,
+    transition: "all 0.3s ease",
   },
-  statusLabel: { fontSize: 11, textTransform: "capitalize" as const },
+  statusLabel: {
+    fontSize: 11, textTransform: "capitalize" as const,
+    fontFamily: "var(--font-body)", letterSpacing: "0.02em",
+  },
   statusLine: {
-    position: "absolute", top: 7, left: "60%", right: "-40%",
-    height: 2,
+    position: "absolute", top: 8, left: "60%", right: "-40%", height: 2,
+    transition: "background 0.3s ease",
   },
-  statusActions: { display: "flex", gap: 8, justifyContent: "center" },
+  statusActions: { display: "flex", gap: 10, justifyContent: "center" },
   actionBtn: {
-    padding: "8px 20px", borderRadius: 8, border: "none",
-    background: "#2563eb", color: "#fff", fontSize: 14,
-    fontWeight: 600, cursor: "pointer",
+    padding: "10px 24px", borderRadius: 10, border: "none",
+    background: "var(--gold)", color: "#0a0c14", fontSize: 13,
+    fontWeight: 700, cursor: "pointer", fontFamily: "var(--font-body)",
+    letterSpacing: "0.03em", textTransform: "uppercase" as const,
   },
   warningBox: {
-    background: "#422006", border: "1px solid #854d0e",
-    borderRadius: 8, padding: 16, marginBottom: 16,
-    fontSize: 14, color: "#fde68a",
+    background: "rgba(251, 191, 36, 0.08)", border: "1px solid rgba(251, 191, 36, 0.2)",
+    borderRadius: 12, padding: 18, marginBottom: 18,
+    fontSize: 14, color: "#fde68a", fontFamily: "var(--font-body)", lineHeight: 1.6,
   },
-  policyName: { fontSize: 14, color: "#94a3b8", marginBottom: 12 },
-  stepsList: { display: "flex", flexDirection: "column", gap: 12 },
+  policyName: {
+    fontSize: 13, color: "var(--text-secondary)", marginBottom: 14,
+    fontFamily: "var(--font-body)",
+  },
+  stepsList: { display: "flex", flexDirection: "column", gap: 14 },
   stepItem: {
-    display: "flex", alignItems: "flex-start", gap: 12, cursor: "pointer",
+    display: "flex", alignItems: "flex-start", gap: 14, cursor: "pointer",
   },
   stepCheck: {
-    width: 22, height: 22, minWidth: 22, borderRadius: 4,
-    border: "2px solid #475569", display: "flex",
+    width: 24, height: 24, minWidth: 24, borderRadius: 6,
+    border: "2px solid rgba(255,255,255,0.12)", display: "flex",
     alignItems: "center", justifyContent: "center", marginTop: 1,
+    transition: "all 0.2s ease",
   },
-  stepText: { fontSize: 14, color: "#e2e8f0", lineHeight: "1.5" },
+  stepText: {
+    fontSize: 14, color: "var(--text-primary)", lineHeight: "1.6",
+    fontFamily: "var(--font-body)", transition: "opacity 0.2s ease",
+  },
   actionLinks: {
-    display: "flex", gap: 8, marginTop: 20, flexWrap: "wrap",
+    display: "flex", gap: 10, marginTop: 22, flexWrap: "wrap",
   },
   linkBtn: {
-    padding: "10px 20px", borderRadius: 8, background: "#2563eb",
-    color: "#fff", fontSize: 14, fontWeight: 600,
+    padding: "11px 22px", borderRadius: 10, background: "var(--gold)",
+    color: "#0a0c14", fontSize: 13, fontWeight: 700,
     textDecoration: "none", textAlign: "center",
+    fontFamily: "var(--font-body)", letterSpacing: "0.03em",
+    textTransform: "uppercase" as const,
   },
   phoneBtn: {
-    padding: "10px 20px", borderRadius: 8, border: "1px solid #334155",
-    background: "#1e293b", color: "#e2e8f0", fontSize: 14,
+    padding: "11px 22px", borderRadius: 10, border: "1px solid var(--border-hover)",
+    background: "transparent", color: "var(--text-secondary)", fontSize: 13,
     fontWeight: 600, textDecoration: "none", textAlign: "center",
+    fontFamily: "var(--font-body)",
   },
   infoBox: {
-    background: "#1a1a2e", border: "1px solid #334155",
-    borderRadius: 8, padding: 16, marginBottom: 16,
+    background: "rgba(255,255,255,0.02)", border: "1px solid var(--border)",
+    borderRadius: 12, padding: 18, marginBottom: 18,
   },
-  infoTitle: { fontSize: 14, fontWeight: 600, color: "#fbbf24", marginBottom: 8 },
+  infoTitle: {
+    fontSize: 13, fontWeight: 700, color: "var(--gold)", marginBottom: 10,
+    fontFamily: "var(--font-body)", letterSpacing: "0.04em",
+    textTransform: "uppercase" as const,
+  },
   restrictionsList: { paddingLeft: 20, margin: 0 },
-  restrictionItem: { fontSize: 13, color: "#94a3b8", marginBottom: 4 },
-  expiryNote: { fontSize: 13, color: "#94a3b8", marginTop: 12 },
+  restrictionItem: {
+    fontSize: 13, color: "var(--text-secondary)", marginBottom: 6,
+    fontFamily: "var(--font-body)", lineHeight: 1.5,
+  },
+  expiryNote: {
+    fontSize: 13, color: "var(--text-secondary)", marginTop: 14,
+    fontFamily: "var(--font-body)",
+  },
   input: {
-    width: "100%", padding: "10px 12px", borderRadius: 8,
-    border: "1px solid #334155", background: "#0f172a",
-    color: "#f1f5f9", fontSize: 14, outline: "none", marginBottom: 10,
-    boxSizing: "border-box" as const,
+    width: "100%", padding: "12px 14px", borderRadius: 10,
+    border: "1px solid var(--border)", background: "var(--bg-input)",
+    color: "var(--text-primary)", fontSize: 14, outline: "none", marginBottom: 12,
+    boxSizing: "border-box" as const, fontFamily: "var(--font-body)",
   },
   textarea: {
-    width: "100%", padding: "10px 12px", borderRadius: 8,
-    border: "1px solid #334155", background: "#0f172a",
-    color: "#f1f5f9", fontSize: 14, fontFamily: "inherit",
-    resize: "vertical" as const, outline: "none", marginBottom: 10,
+    width: "100%", padding: "12px 14px", borderRadius: 10,
+    border: "1px solid var(--border)", background: "var(--bg-input)",
+    color: "var(--text-primary)", fontSize: 14, fontFamily: "var(--font-body)",
+    resize: "vertical" as const, outline: "none", marginBottom: 12,
     boxSizing: "border-box" as const,
   },
   saveBtn: {
-    padding: "8px 16px", borderRadius: 8, border: "1px solid #334155",
-    background: "#1e293b", color: "#e2e8f0", fontSize: 14,
-    fontWeight: 600, cursor: "pointer",
+    padding: "9px 20px", borderRadius: 10, border: "1px solid var(--border-hover)",
+    background: "transparent", color: "var(--text-secondary)", fontSize: 13,
+    fontWeight: 600, cursor: "pointer", fontFamily: "var(--font-body)",
   },
 };
