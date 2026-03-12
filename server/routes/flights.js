@@ -44,7 +44,7 @@ router.get("/:id", verifyToken, (req, res) => {
 
 // Add flight by pasting booking email text
 router.post("/parse", verifyToken, async (req, res) => {
-  const { emailText } = req.body;
+  const { emailText, paymentType, milesPaid } = req.body;
   if (!emailText || !emailText.trim()) {
     return res.status(400).json({ error: "No email text provided" });
   }
@@ -53,17 +53,20 @@ router.post("/parse", verifyToken, async (req, res) => {
     const parsed = await parseBookingEmail(emailText);
 
     const id = uuidv4();
+    const pType = paymentType === "miles" ? "miles" : "cash";
     db.run(
       `INSERT INTO flights (id, user_id, user_email, airline, airline_code, flight_number,
         origin, destination, departure_date, return_date, fare_class,
-        price_paid, currency, booking_ref, passengers, raw_email)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        price_paid, currency, booking_ref, passengers, payment_type, miles_paid, raw_email)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         id, req.user.userId, req.user.email,
         parsed.airline, parsed.airline_code, parsed.flight_number,
         parsed.origin, parsed.destination, parsed.departure_date, parsed.return_date,
         parsed.fare_class, parsed.price_paid, parsed.currency || "USD",
-        parsed.booking_ref, parsed.passengers || 1, emailText.substring(0, 5000),
+        parsed.booking_ref, parsed.passengers || 1,
+        pType, pType === "miles" ? (milesPaid || parsed.price_paid) : null,
+        emailText.substring(0, 5000),
       ]
     );
 

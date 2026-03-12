@@ -43,6 +43,8 @@ async function initDb() {
     booking_ref TEXT,
     passengers INTEGER DEFAULT 1,
     status TEXT DEFAULT 'active',
+    payment_type TEXT DEFAULT 'cash',
+    miles_paid INTEGER,
     raw_email TEXT,
     created_at TEXT DEFAULT (datetime('now')),
     FOREIGN KEY (user_id) REFERENCES users(id)
@@ -114,13 +116,19 @@ async function initDb() {
 
   db.run("CREATE INDEX IF NOT EXISTS idx_baggage_claims_user ON baggage_claims(user_id)");
 
-  // Migration: add user_id to flights if missing (existing installs)
+  // Migrations for existing installs
   try {
     const cols = db.exec("PRAGMA table_info(flights)");
     if (cols.length > 0) {
-      const hasUserId = cols[0].values.some((row) => row[1] === "user_id");
-      if (!hasUserId) {
+      const colNames = cols[0].values.map((row) => row[1]);
+      if (!colNames.includes("user_id")) {
         db.run("ALTER TABLE flights ADD COLUMN user_id TEXT REFERENCES users(id)");
+      }
+      if (!colNames.includes("payment_type")) {
+        db.run("ALTER TABLE flights ADD COLUMN payment_type TEXT DEFAULT 'cash'");
+      }
+      if (!colNames.includes("miles_paid")) {
+        db.run("ALTER TABLE flights ADD COLUMN miles_paid INTEGER");
       }
     }
   } catch (e) {

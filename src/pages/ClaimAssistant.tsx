@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import { apiFetch } from "../hooks/useApi";
 
+interface AwardRepricing {
+  allowed: boolean | null;
+  fee: string;
+  method: string;
+  steps: string[];
+}
+
 interface Policy {
   name: string;
   allowsRebooking: boolean | null;
@@ -12,6 +19,7 @@ interface Policy {
   refundType: string;
   basicEconomyEligible: boolean | null;
   creditExpiry: string;
+  awardRepricing?: AwardRepricing;
 }
 
 interface Claim {
@@ -35,6 +43,8 @@ interface Claim {
   created_at: string;
   updated_at: string;
   policy: Policy;
+  payment_type: string | null;
+  miles_paid: number | null;
 }
 
 const STATUS_FLOW = ["detected", "in_progress", "submitted", "approved"];
@@ -86,6 +96,10 @@ export function ClaimAssistant({
     return <div style={styles.loading}>Loading claim...</div>;
   }
 
+  const isMiles = claim.payment_type === "miles";
+  const awardInfo = claim.policy.awardRepricing;
+  const activeSteps = isMiles && awardInfo ? awardInfo.steps : claim.policy.steps;
+
   const isBasicEconomy =
     claim.fare_class &&
     (claim.fare_class.toLowerCase().includes("basic") ||
@@ -118,12 +132,22 @@ export function ClaimAssistant({
         </div>
 
         <div style={styles.savingsBox}>
-          <div style={styles.savingsAmount}>${claim.savings.toFixed(0)}</div>
-          <div style={styles.savingsLabel}>potential savings</div>
+          <div style={styles.savingsAmount}>
+            {isMiles
+              ? `${claim.savings.toLocaleString()} mi`
+              : `$${claim.savings.toFixed(0)}`}
+          </div>
+          <div style={styles.savingsLabel}>
+            {isMiles ? "miles to reclaim" : "potential savings"}
+          </div>
           <div style={styles.priceCompare}>
-            <span style={styles.pricePaid}>${claim.price_paid}</span>
+            <span style={styles.pricePaid}>
+              {isMiles ? `${claim.price_paid.toLocaleString()} mi` : `$${claim.price_paid}`}
+            </span>
             <span style={styles.priceArrow}>&rarr;</span>
-            <span style={styles.priceFound}>${claim.price_found}</span>
+            <span style={styles.priceFound}>
+              {isMiles ? `${claim.price_found.toLocaleString()} mi` : `$${claim.price_found}`}
+            </span>
           </div>
         </div>
       </div>
@@ -217,11 +241,21 @@ export function ClaimAssistant({
         </div>
       )}
 
+      {isMiles && awardInfo && (
+        <div className="animate-in animate-in-2" style={styles.awardBanner}>
+          <strong>Award Ticket</strong> — This flight was booked with miles.
+          {awardInfo.fee !== "Free" && ` Repricing fee: ${awardInfo.fee}.`}
+          {awardInfo.allowed === false && " This airline may not allow award repricing."}
+        </div>
+      )}
+
       <div className="glass-card-static animate-in animate-in-2" style={styles.card}>
-        <h3 style={styles.sectionTitle}>How to File Your Claim</h3>
+        <h3 style={styles.sectionTitle}>
+          {isMiles ? "How to Reprice Your Award" : "How to File Your Claim"}
+        </h3>
         <p style={styles.policyName}>{claim.policy.name}</p>
         <div style={styles.stepsList}>
-          {claim.policy.steps.map((step, i) => (
+          {activeSteps.map((step, i) => (
             <div
               key={i}
               style={styles.stepItem}
@@ -399,6 +433,11 @@ const styles: Record<string, React.CSSProperties> = {
     background: "rgba(251, 191, 36, 0.08)", border: "1px solid rgba(251, 191, 36, 0.2)",
     borderRadius: 12, padding: 18, marginBottom: 18,
     fontSize: 14, color: "#fde68a", fontFamily: "var(--font-body)", lineHeight: 1.6,
+  },
+  awardBanner: {
+    background: "rgba(139, 92, 246, 0.08)", border: "1px solid rgba(139, 92, 246, 0.2)",
+    borderRadius: 12, padding: 18, marginBottom: 18,
+    fontSize: 14, color: "#c4b5fd", fontFamily: "var(--font-body)", lineHeight: 1.6,
   },
   policyName: {
     fontSize: 13, color: "var(--text-secondary)", marginBottom: 14,

@@ -19,6 +19,8 @@ interface Flight {
   status: string;
   user_email: string;
   created_at: string;
+  payment_type: string | null;
+  miles_paid: number | null;
 }
 
 interface PriceCheck {
@@ -89,10 +91,13 @@ export function FlightDetail({
     return <div style={styles.loading}>Loading...</div>;
   }
 
+  const isMiles = flight.payment_type === "miles";
   const latestPrice = prices.length > 0
     ? prices[prices.length - 1].current_price
     : null;
   const savings = latestPrice !== null ? flight.price_paid - latestPrice : null;
+  const fmtPrice = (v: number) => isMiles ? `${v.toLocaleString()} mi` : `$${v}`;
+  const fmtSavings = (v: number) => isMiles ? `${v.toLocaleString()} mi` : `$${v.toFixed(0)}`;
 
   return (
     <div className="animate-in" style={styles.container}>
@@ -123,15 +128,18 @@ export function FlightDetail({
           <InfoRow label="Fare Class" value={flight.fare_class} />
           <InfoRow label="Passengers" value={String(flight.passengers)} />
           <InfoRow label="Booking Ref" value={flight.booking_ref} mono />
-          <InfoRow label="Price Paid" value={`$${flight.price_paid}`} mono />
+          {isMiles && (
+            <InfoRow label="Payment" value="Award (Miles)" />
+          )}
+          <InfoRow label={isMiles ? "Miles Paid" : "Price Paid"} value={fmtPrice(isMiles ? (flight.miles_paid || flight.price_paid) : flight.price_paid)} mono />
           <InfoRow
-            label="Current Price"
-            value={latestPrice !== null ? `$${latestPrice}` : "Pending"}
+            label={isMiles ? "Current Award" : "Current Price"}
+            value={latestPrice !== null ? fmtPrice(latestPrice) : "Pending"}
             highlight={savings !== null && savings > 0}
             mono
           />
           {savings !== null && savings > 0 && (
-            <InfoRow label="Savings" value={`$${savings.toFixed(0)}`} highlight mono />
+            <InfoRow label="Savings" value={fmtSavings(savings)} highlight mono />
           )}
         </div>
       </div>
@@ -165,7 +173,7 @@ export function FlightDetail({
                         : "var(--text-primary)",
                   }}
                 >
-                  {p.current_price !== null ? `$${p.current_price}` : "N/A"}
+                  {p.current_price !== null ? fmtPrice(p.current_price) : "N/A"}
                 </span>
               </div>
             ))}
@@ -179,7 +187,7 @@ export function FlightDetail({
             <>
               <div style={styles.claimHeader}>
                 <span style={styles.claimBadge}>{claimStatus?.replace("_", " ")}</span>
-                <span style={styles.claimSavings}>Save ${savings.toFixed(0)}</span>
+                <span style={styles.claimSavings}>Save {fmtSavings(savings)}</span>
               </div>
               <p style={styles.claimText}>
                 You have a claim in progress for this flight.
@@ -192,11 +200,13 @@ export function FlightDetail({
             <>
               <div style={styles.claimHeader}>
                 <span style={styles.claimSavings}>
-                  Price dropped ${savings.toFixed(0)}!
+                  {isMiles ? `Award dropped ${savings.toLocaleString()} miles!` : `Price dropped $${savings.toFixed(0)}!`}
                 </span>
               </div>
               <p style={styles.claimText}>
-                You may be eligible for a travel credit from the airline.
+                {isMiles
+                  ? "You may be able to get miles redeposited by repricing your award ticket."
+                  : "You may be eligible for a travel credit from the airline."}
               </p>
               <button
                 onClick={handleCreateClaim}

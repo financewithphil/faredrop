@@ -15,6 +15,8 @@ interface Flight {
   alert_count: number;
   claim_id: string | null;
   claim_status: string | null;
+  payment_type: string | null;
+  miles_paid: number | null;
 }
 
 export function FlightCard({
@@ -24,6 +26,7 @@ export function FlightCard({
   flight: Flight;
   onClick: () => void;
 }) {
+  const isMiles = flight.payment_type === "miles";
   const savings =
     flight.current_price !== null
       ? flight.price_paid - flight.current_price
@@ -79,8 +82,12 @@ export function FlightCard({
 
       <div style={styles.prices}>
         <div style={styles.priceBlock}>
-          <span style={styles.priceLabel}>Paid</span>
-          <span style={styles.priceValue}>${flight.price_paid}</span>
+          <span style={styles.priceLabel}>{isMiles ? "Miles Paid" : "Paid"}</span>
+          <span style={styles.priceValue}>
+            {isMiles
+              ? `${(flight.miles_paid || flight.price_paid).toLocaleString()} mi`
+              : `$${flight.price_paid}`}
+          </span>
         </div>
         <div style={styles.priceBlock}>
           <span style={styles.priceLabel}>Current</span>
@@ -91,7 +98,9 @@ export function FlightCard({
             }}
           >
             {flight.current_price !== null
-              ? `$${flight.current_price}`
+              ? isMiles
+                ? `${flight.current_price.toLocaleString()} mi`
+                : `$${flight.current_price}`
               : "..."}
           </span>
         </div>
@@ -99,7 +108,9 @@ export function FlightCard({
           <div className="savings-pulse" style={styles.savingsBadge}>
             {flight.claim_id
               ? `Claim: ${(flight.claim_status || "detected").replace("_", " ")}`
-              : `Save $${savings!.toFixed(0)}`}
+              : isMiles
+                ? `Save ${savings!.toLocaleString()} mi`
+                : `Save $${savings!.toFixed(0)}`}
           </div>
         )}
       </div>

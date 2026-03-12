@@ -18,6 +18,17 @@ module.exports = {
     refundType: "travel_credit_or_points",
     basicEconomyEligible: false,
     creditExpiry: "12 months",
+    awardRepricing: {
+      allowed: true,
+      fee: "Free",
+      method: "self-service",
+      steps: [
+        "Log in to southwest.com and go to 'My Trips'",
+        "Select the award flight and click 'Change Flight'",
+        "Search for the same flight — if fewer points required, the difference is redeposited",
+        "Points are returned to your Rapid Rewards account immediately",
+      ],
+    },
   },
   DL: {
     name: "Delta Air Lines",
@@ -39,6 +50,17 @@ module.exports = {
     refundType: "ecredit",
     basicEconomyEligible: false,
     creditExpiry: "1 year",
+    awardRepricing: {
+      allowed: true,
+      fee: "Free (no redeposit fee)",
+      method: "self-service",
+      steps: [
+        "Go to delta.com/mytrips and find your award booking",
+        "Click 'Modify Flight' and search for the same route",
+        "If fewer SkyMiles required, cancel and rebook at the lower rate",
+        "SkyMiles are redeposited instantly — taxes/fees difference refunded to card",
+      ],
+    },
   },
   UA: {
     name: "United Airlines",
@@ -61,6 +83,17 @@ module.exports = {
     refundType: "travel_credit",
     basicEconomyEligible: false,
     creditExpiry: "1 year",
+    awardRepricing: {
+      allowed: true,
+      fee: "Free (no redeposit fee)",
+      method: "self-service",
+      steps: [
+        "Go to united.com and click 'My Trips'",
+        "Find the award reservation and select 'Cancel'",
+        "Rebook the same flight at the lower MileagePlus award rate",
+        "Miles redeposited instantly; tax/fee difference refunded to original payment",
+      ],
+    },
   },
   AA: {
     name: "American Airlines",
@@ -83,6 +116,18 @@ module.exports = {
     refundType: "trip_credit",
     basicEconomyEligible: false,
     creditExpiry: "1 year",
+    awardRepricing: {
+      allowed: true,
+      fee: "Free for most award tickets",
+      method: "self-service-or-call",
+      steps: [
+        "Log in to aa.com and go to 'Manage Trips'",
+        "Find your award booking and select 'Change Trip'",
+        "Search for the same flight at the lower AAdvantage rate",
+        "If online change fails, call 1-800-433-7300 to request award repricing",
+        "Miles difference redeposited; tax/fee difference refunded",
+      ],
+    },
   },
   B6: {
     name: "JetBlue",
@@ -104,6 +149,17 @@ module.exports = {
     refundType: "travel_bank",
     basicEconomyEligible: false,
     creditExpiry: "12 months",
+    awardRepricing: {
+      allowed: true,
+      fee: "Free",
+      method: "self-service",
+      steps: [
+        "Log in to jetblue.com and go to 'Manage Trips'",
+        "Select the award booking and click 'Change Flight'",
+        "Rebook at the lower TrueBlue points rate",
+        "Points difference returned to your TrueBlue account",
+      ],
+    },
   },
   AS: {
     name: "Alaska Airlines",
@@ -125,6 +181,17 @@ module.exports = {
     refundType: "travel_credit",
     basicEconomyEligible: false,
     creditExpiry: "1 year",
+    awardRepricing: {
+      allowed: true,
+      fee: "Free",
+      method: "self-service-or-call",
+      steps: [
+        "Go to alaskaair.com and find your award trip",
+        "Cancel the award booking (miles redeposited instantly)",
+        "Rebook the same flight at the lower Mileage Plan rate",
+        "If online tools don't work, call 1-800-252-7522",
+      ],
+    },
   },
   NK: {
     name: "Spirit Airlines",
@@ -146,6 +213,16 @@ module.exports = {
     refundType: "reservation_credit",
     basicEconomyEligible: true,
     creditExpiry: "90 days",
+    awardRepricing: {
+      allowed: true,
+      fee: "Free for Free Spirit points bookings",
+      method: "call",
+      steps: [
+        "Call Spirit at 1-855-728-3555",
+        "Reference your confirmation code and request award repricing",
+        "If fewer points are needed, ask them to redeposit the difference",
+      ],
+    },
   },
   F9: {
     name: "Frontier Airlines",
@@ -167,6 +244,16 @@ module.exports = {
     refundType: "travel_credit",
     basicEconomyEligible: true,
     creditExpiry: "90 days",
+    awardRepricing: {
+      allowed: true,
+      fee: "May apply depending on fare",
+      method: "call",
+      steps: [
+        "Call Frontier at 1-801-401-9000",
+        "Ask if your FRONTIER Miles booking can be repriced",
+        "If a lower award rate is available, request the miles difference back",
+      ],
+    },
   },
   // ── SkyTeam Alliance ──
   KE: {
@@ -191,6 +278,16 @@ module.exports = {
     refundType: "refund_or_credit",
     basicEconomyEligible: false,
     creditExpiry: "1 year",
+    awardRepricing: {
+      allowed: true,
+      fee: "$30 redeposit fee per ticket",
+      method: "call",
+      steps: [
+        "Call Korean Air at 1-800-438-5000",
+        "Request cancellation and rebooking at the lower Skypass award rate",
+        "Miles redeposited minus $30 per ticket fee; rebook immediately",
+      ],
+    },
   },
   AF: {
     name: "Air France",
@@ -217,6 +314,17 @@ module.exports = {
     refundType: "refund_or_voucher",
     basicEconomyEligible: false,
     creditExpiry: "12 months",
+    awardRepricing: {
+      allowed: true,
+      fee: "Free for Flying Blue award changes",
+      method: "self-service-or-call",
+      steps: [
+        "Log in to airfrance.com and go to 'My Bookings'",
+        "Find the award trip and select 'Modify'",
+        "If a lower Flying Blue rate is available, rebook",
+        "Miles difference returned; call +1-800-237-2747 if online change fails",
+      ],
+    },
   },
   KL: {
     name: "KLM",
@@ -243,6 +351,17 @@ module.exports = {
     refundType: "refund_or_credit",
     basicEconomyEligible: false,
     creditExpiry: "12 months",
+    awardRepricing: {
+      allowed: true,
+      fee: "Free for Flying Blue award changes",
+      method: "self-service-or-call",
+      steps: [
+        "Log in to klm.com and go to 'My Trip'",
+        "Find your Flying Blue award booking",
+        "Modify to the lower award rate if available",
+        "Call +1-800-618-0104 if self-service doesn't show lower rates",
+      ],
+    },
   },
   AM: {
     name: "Aeromexico",
@@ -269,6 +388,17 @@ module.exports = {
     refundType: "refund_or_credit",
     basicEconomyEligible: false,
     creditExpiry: "12 months",
+    awardRepricing: {
+      allowed: null,
+      fee: "Varies",
+      method: "call",
+      steps: [
+        "Contact the airline directly to inquire about award repricing",
+        "Reference your booking confirmation and frequent flyer number",
+        "Ask if fewer miles/points are now required for your route and dates",
+        "If a lower award rate exists, request the miles difference be redeposited",
+      ],
+    },
   },
   VS: {
     name: "Virgin Atlantic",
@@ -293,6 +423,17 @@ module.exports = {
     refundType: "refund_or_voucher",
     basicEconomyEligible: false,
     creditExpiry: "12 months",
+    awardRepricing: {
+      allowed: null,
+      fee: "Varies",
+      method: "call",
+      steps: [
+        "Contact the airline directly to inquire about award repricing",
+        "Reference your booking confirmation and frequent flyer number",
+        "Ask if fewer miles/points are now required for your route and dates",
+        "If a lower award rate exists, request the miles difference be redeposited",
+      ],
+    },
   },
   AZ: {
     name: "ITA Airways",
@@ -318,6 +459,17 @@ module.exports = {
     refundType: "refund_or_voucher",
     basicEconomyEligible: false,
     creditExpiry: "12 months",
+    awardRepricing: {
+      allowed: null,
+      fee: "Varies",
+      method: "call",
+      steps: [
+        "Contact the airline directly to inquire about award repricing",
+        "Reference your booking confirmation and frequent flyer number",
+        "Ask if fewer miles/points are now required for your route and dates",
+        "If a lower award rate exists, request the miles difference be redeposited",
+      ],
+    },
   },
   MU: {
     name: "China Eastern",
@@ -342,6 +494,17 @@ module.exports = {
     refundType: "refund_or_credit",
     basicEconomyEligible: false,
     creditExpiry: "12 months",
+    awardRepricing: {
+      allowed: null,
+      fee: "Varies",
+      method: "call",
+      steps: [
+        "Contact the airline directly to inquire about award repricing",
+        "Reference your booking confirmation and frequent flyer number",
+        "Ask if fewer miles/points are now required for your route and dates",
+        "If a lower award rate exists, request the miles difference be redeposited",
+      ],
+    },
   },
   VN: {
     name: "Vietnam Airlines",
@@ -365,6 +528,17 @@ module.exports = {
     refundType: "varies",
     basicEconomyEligible: false,
     creditExpiry: "12 months",
+    awardRepricing: {
+      allowed: null,
+      fee: "Varies",
+      method: "call",
+      steps: [
+        "Contact the airline directly to inquire about award repricing",
+        "Reference your booking confirmation and frequent flyer number",
+        "Ask if fewer miles/points are now required for your route and dates",
+        "If a lower award rate exists, request the miles difference be redeposited",
+      ],
+    },
   },
   CI: {
     name: "China Airlines",
@@ -388,6 +562,17 @@ module.exports = {
     refundType: "varies",
     basicEconomyEligible: false,
     creditExpiry: "12 months",
+    awardRepricing: {
+      allowed: null,
+      fee: "Varies",
+      method: "call",
+      steps: [
+        "Contact the airline directly to inquire about award repricing",
+        "Reference your booking confirmation and frequent flyer number",
+        "Ask if fewer miles/points are now required for your route and dates",
+        "If a lower award rate exists, request the miles difference be redeposited",
+      ],
+    },
   },
   GA: {
     name: "Garuda Indonesia",
@@ -410,6 +595,17 @@ module.exports = {
     refundType: "varies",
     basicEconomyEligible: false,
     creditExpiry: "12 months",
+    awardRepricing: {
+      allowed: null,
+      fee: "Varies",
+      method: "call",
+      steps: [
+        "Contact the airline directly to inquire about award repricing",
+        "Reference your booking confirmation and frequent flyer number",
+        "Ask if fewer miles/points are now required for your route and dates",
+        "If a lower award rate exists, request the miles difference be redeposited",
+      ],
+    },
   },
   KQ: {
     name: "Kenya Airways",
@@ -433,6 +629,17 @@ module.exports = {
     refundType: "varies",
     basicEconomyEligible: false,
     creditExpiry: "12 months",
+    awardRepricing: {
+      allowed: null,
+      fee: "Varies",
+      method: "call",
+      steps: [
+        "Contact the airline directly to inquire about award repricing",
+        "Reference your booking confirmation and frequent flyer number",
+        "Ask if fewer miles/points are now required for your route and dates",
+        "If a lower award rate exists, request the miles difference be redeposited",
+      ],
+    },
   },
   SV: {
     name: "Saudia",
@@ -455,6 +662,17 @@ module.exports = {
     refundType: "varies",
     basicEconomyEligible: false,
     creditExpiry: "12 months",
+    awardRepricing: {
+      allowed: null,
+      fee: "Varies",
+      method: "call",
+      steps: [
+        "Contact the airline directly to inquire about award repricing",
+        "Reference your booking confirmation and frequent flyer number",
+        "Ask if fewer miles/points are now required for your route and dates",
+        "If a lower award rate exists, request the miles difference be redeposited",
+      ],
+    },
   },
   RO: {
     name: "TAROM",
@@ -477,6 +695,17 @@ module.exports = {
     refundType: "varies",
     basicEconomyEligible: false,
     creditExpiry: "12 months",
+    awardRepricing: {
+      allowed: null,
+      fee: "Varies",
+      method: "call",
+      steps: [
+        "Contact the airline directly to inquire about award repricing",
+        "Reference your booking confirmation and frequent flyer number",
+        "Ask if fewer miles/points are now required for your route and dates",
+        "If a lower award rate exists, request the miles difference be redeposited",
+      ],
+    },
   },
   ME: {
     name: "Middle East Airlines",
@@ -498,6 +727,17 @@ module.exports = {
     refundType: "varies",
     basicEconomyEligible: false,
     creditExpiry: "12 months",
+    awardRepricing: {
+      allowed: null,
+      fee: "Varies",
+      method: "call",
+      steps: [
+        "Contact the airline directly to inquire about award repricing",
+        "Reference your booking confirmation and frequent flyer number",
+        "Ask if fewer miles/points are now required for your route and dates",
+        "If a lower award rate exists, request the miles difference be redeposited",
+      ],
+    },
   },
   UX: {
     name: "Air Europa",
@@ -520,6 +760,17 @@ module.exports = {
     refundType: "varies",
     basicEconomyEligible: false,
     creditExpiry: "12 months",
+    awardRepricing: {
+      allowed: null,
+      fee: "Varies",
+      method: "call",
+      steps: [
+        "Contact the airline directly to inquire about award repricing",
+        "Reference your booking confirmation and frequent flyer number",
+        "Ask if fewer miles/points are now required for your route and dates",
+        "If a lower award rate exists, request the miles difference be redeposited",
+      ],
+    },
   },
   MF: {
     name: "Xiamen Airlines",
@@ -542,6 +793,17 @@ module.exports = {
     refundType: "varies",
     basicEconomyEligible: false,
     creditExpiry: "12 months",
+    awardRepricing: {
+      allowed: null,
+      fee: "Varies",
+      method: "call",
+      steps: [
+        "Contact the airline directly to inquire about award repricing",
+        "Reference your booking confirmation and frequent flyer number",
+        "Ask if fewer miles/points are now required for your route and dates",
+        "If a lower award rate exists, request the miles difference be redeposited",
+      ],
+    },
   },
   _default: {
     name: "Other Airline",
@@ -563,5 +825,16 @@ module.exports = {
     refundType: "varies",
     basicEconomyEligible: null,
     creditExpiry: "varies",
+    awardRepricing: {
+      allowed: null,
+      fee: "Varies by airline",
+      method: "call",
+      steps: [
+        "Contact the airline's frequent flyer program directly",
+        "Reference your award booking confirmation number",
+        "Ask if a lower award rate is available for your route and dates",
+        "Request the miles/points difference be redeposited to your account",
+      ],
+    },
   },
 };

@@ -20,6 +20,8 @@ interface Flight {
   alert_count: number;
   claim_id: string | null;
   claim_status: string | null;
+  payment_type: string | null;
+  miles_paid: number | null;
 }
 
 interface BaggageClaim {
@@ -52,6 +54,9 @@ export function Dashboard({
   const [pasteText, setPasteText] = useState("");
   const [pasting, setPasting] = useState(false);
   const [pasteError, setPasteError] = useState("");
+  const [paymentType, setPaymentType] = useState<"cash" | "miles">("cash");
+  const [milesPaid, setMilesPaid] = useState("");
+  const [faqOpen, setFaqOpen] = useState<number | null>(null);
 
   const fetchFlights = async () => {
     try {
@@ -99,7 +104,11 @@ export function Dashboard({
     try {
       const res = await apiFetch("/api/flights/parse", {
         method: "POST",
-        body: JSON.stringify({ emailText: pasteText }),
+        body: JSON.stringify({
+          emailText: pasteText,
+          paymentType,
+          milesPaid: paymentType === "miles" && milesPaid ? parseInt(milesPaid) : undefined,
+        }),
       });
       if (!res.ok) {
         const err = await res.json();
@@ -107,6 +116,8 @@ export function Dashboard({
       }
       setPasteText("");
       setShowPaste(false);
+      setPaymentType("cash");
+      setMilesPaid("");
       await fetchFlights();
     } catch (err: any) {
       setPasteError(err.message);
@@ -156,10 +167,49 @@ export function Dashboard({
           <p style={styles.modalDesc}>
             Copy and paste the text from your airline booking confirmation email.
           </p>
+
+          <div style={styles.paymentToggle}>
+            <span style={styles.paymentLabel}>Payment type:</span>
+            <div style={styles.toggleBtns}>
+              <button
+                type="button"
+                onClick={() => setPaymentType("cash")}
+                style={{
+                  ...styles.toggleBtn,
+                  ...(paymentType === "cash" ? styles.toggleBtnActive : {}),
+                }}
+              >
+                Cash / Card
+              </button>
+              <button
+                type="button"
+                onClick={() => setPaymentType("miles")}
+                style={{
+                  ...styles.toggleBtn,
+                  ...(paymentType === "miles" ? styles.toggleBtnActive : {}),
+                }}
+              >
+                Miles / Points
+              </button>
+            </div>
+          </div>
+
+          {paymentType === "miles" && (
+            <input
+              type="number"
+              placeholder="Miles/points used (e.g., 25000)"
+              value={milesPaid}
+              onChange={(e) => setMilesPaid(e.target.value)}
+              style={styles.milesInput}
+            />
+          )}
+
           <textarea
             value={pasteText}
             onChange={(e) => setPasteText(e.target.value)}
-            placeholder={"Your Trip Confirmation\nConfirmation #: ABC123\nFlight: UA 456\nFrom: ORD to LAX\nDate: April 10, 2026\nTotal: $289.00"}
+            placeholder={paymentType === "miles"
+              ? "Your Award Confirmation\nConfirmation #: ABC123\nFlight: UA 456\nFrom: ORD to LAX\nDate: April 10, 2026\nMiles Used: 25,000"
+              : "Your Trip Confirmation\nConfirmation #: ABC123\nFlight: UA 456\nFrom: ORD to LAX\nDate: April 10, 2026\nTotal: $289.00"}
             style={styles.textarea}
             rows={10}
             autoFocus
@@ -266,10 +316,68 @@ export function Dashboard({
         </div>
       )}
 
+      <div className="glass-card-static animate-in animate-in-4" style={styles.faqSection}>
+        <h3 style={styles.sectionHeading}>
+          Frequently Asked Questions
+        </h3>
+        {FAQ_ITEMS.map((item, i) => (
+          <div key={i} style={styles.faqItem}>
+            <button
+              onClick={() => setFaqOpen(faqOpen === i ? null : i)}
+              style={styles.faqQuestion}
+            >
+              <span>{item.q}</span>
+              <span style={{
+                ...styles.faqChevron,
+                transform: faqOpen === i ? "rotate(180deg)" : "rotate(0deg)",
+              }}>&#9660;</span>
+            </button>
+            {faqOpen === i && (
+              <div style={styles.faqAnswer}>{item.a}</div>
+            )}
+          </div>
+        ))}
+      </div>
+
       {showPaste && renderModal()}
     </div>
   );
 }
+
+const FAQ_ITEMS = [
+  {
+    q: "How does FareDrop track prices?",
+    a: "We check your flight's price 3 times daily using airline pricing data. When the current fare drops below what you paid, we alert you and show you exactly how to claim the difference.",
+  },
+  {
+    q: "Does this work with miles/points bookings?",
+    a: "Yes! When adding a flight, select \"Miles / Points\" as the payment type. If the award price drops, we'll show you airline-specific steps to get your miles redeposited. Most major US airlines allow free award repricing.",
+  },
+  {
+    q: "How do I get my refund or credit?",
+    a: "When a price drop is detected, click into the flight and follow the step-by-step instructions. Most airlines issue a travel credit or eCredit — you'll typically rebook the same flight at the lower fare through the airline's website or by calling.",
+  },
+  {
+    q: "Does this work for Basic Economy fares?",
+    a: "Unfortunately, most airlines do not allow changes on Basic Economy tickets. FareDrop will warn you if your fare class isn't eligible. However, you can still try calling the airline directly — some agents will make exceptions.",
+  },
+  {
+    q: "What airlines are supported?",
+    a: "We support all major US domestic airlines (Southwest, Delta, United, American, JetBlue, Alaska, Spirit, Frontier) plus SkyTeam alliance carriers. For other airlines, we provide general guidance on how to contact them.",
+  },
+  {
+    q: "How do I add a flight?",
+    a: "Two ways: (1) Paste your booking confirmation email using the \"+ Add Flight\" button, or (2) forward your confirmation email to track@faresaver.financewithphil.com. We'll automatically extract the flight details.",
+  },
+  {
+    q: "What about baggage claims?",
+    a: "FareDrop also helps with lost, damaged, or delayed baggage. Click \"Baggage Claim\" to get airline-specific filing instructions, DOT complaint escalation guidance, and compensation tracking — all in one place.",
+  },
+  {
+    q: "Is my data secure?",
+    a: "Your booking data is stored securely and only accessible to your account. We never share your information with third parties. You can delete any tracked flight at any time.",
+  },
+];
 
 const styles: Record<string, React.CSSProperties> = {
   container: { padding: 24, maxWidth: 800, margin: "0 auto", width: "100%" },
@@ -373,5 +481,53 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "9px 18px", borderRadius: 10, border: "1px solid var(--border)",
     background: "transparent", color: "var(--text-secondary)", fontSize: 13,
     cursor: "pointer", fontFamily: "var(--font-body)",
+  },
+  paymentToggle: {
+    display: "flex", alignItems: "center", gap: 12, marginBottom: 14,
+  },
+  paymentLabel: {
+    fontSize: 11, fontWeight: 700, color: "var(--text-muted)",
+    textTransform: "uppercase" as const, letterSpacing: "0.08em",
+    fontFamily: "var(--font-body)",
+  },
+  toggleBtns: { display: "flex", gap: 8 },
+  toggleBtn: {
+    padding: "7px 16px", borderRadius: 8,
+    border: "1px solid var(--border)", background: "transparent",
+    color: "var(--text-secondary)", fontSize: 12, fontWeight: 600,
+    cursor: "pointer", fontFamily: "var(--font-body)",
+    transition: "all 0.2s ease",
+  },
+  toggleBtnActive: {
+    background: "var(--accent)", color: "#fff",
+    borderColor: "var(--accent)",
+  },
+  milesInput: {
+    width: "100%", padding: "10px 14px", borderRadius: 10,
+    border: "1px solid var(--border)", background: "var(--bg-input)",
+    color: "var(--text-primary)", fontSize: 14, outline: "none",
+    boxSizing: "border-box" as const, fontFamily: "var(--font-mono)",
+    marginBottom: 12,
+  },
+  faqSection: {
+    padding: 24, marginTop: 32,
+  },
+  faqItem: {
+    borderBottom: "1px solid var(--border)",
+  },
+  faqQuestion: {
+    width: "100%", padding: "16px 0", background: "none", border: "none",
+    color: "var(--text-primary)", fontSize: 14, fontWeight: 600,
+    cursor: "pointer", fontFamily: "var(--font-body)",
+    display: "flex", justifyContent: "space-between", alignItems: "center",
+    textAlign: "left" as const, gap: 12,
+  },
+  faqChevron: {
+    fontSize: 10, color: "var(--text-muted)",
+    transition: "transform 0.2s ease", flexShrink: 0,
+  },
+  faqAnswer: {
+    fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.7,
+    paddingBottom: 16, fontFamily: "var(--font-body)",
   },
 };

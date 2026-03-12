@@ -23,7 +23,8 @@ router.get("/", verifyToken, (req, res) => {
 router.get("/:id", verifyToken, (req, res) => {
   const claim = db.getOne(`
     SELECT c.*, f.airline, f.airline_code, f.flight_number, f.origin, f.destination,
-      f.departure_date, f.return_date, f.fare_class, f.booking_ref, f.passengers, f.currency
+      f.departure_date, f.return_date, f.fare_class, f.booking_ref, f.passengers, f.currency,
+      f.payment_type, f.miles_paid
     FROM claims c
     JOIN flights f ON c.flight_id = f.id
     WHERE c.id = ? AND c.user_id = ?
