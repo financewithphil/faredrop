@@ -6,7 +6,7 @@ export function Header({ onLogout }: { onLogout: () => void }) {
   return (
     <header style={styles.header}>
       <div style={styles.left}>
-        <span style={styles.icon}>&#9992;</span>
+        <span style={styles.plane}>&#9992;&#65039;</span>
         <span style={styles.title}>FareDrop</span>
       </div>
       <div style={styles.right}>
@@ -33,7 +33,7 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: "center",
     justifyContent: "space-between",
     padding: "14px 24px",
-    background: "rgba(7, 8, 15, 0.8)",
+    background: "rgba(11, 17, 32, 0.85)",
     backdropFilter: "blur(12px)",
     WebkitBackdropFilter: "blur(12px)",
     borderBottom: "1px solid var(--border)",
@@ -42,14 +42,15 @@ const styles: Record<string, React.CSSProperties> = {
     zIndex: 50,
   },
   left: { display: "flex", alignItems: "center", gap: 10 },
-  icon: {
-    fontSize: 20,
-    filter: "drop-shadow(0 0 6px rgba(212, 168, 83, 0.3))",
+  plane: {
+    fontSize: 32,
+    lineHeight: 1,
+    filter: "drop-shadow(0 0 8px rgba(96, 165, 250, 0.3))",
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 700,
-    color: "var(--gold)",
+    color: "var(--accent)",
     fontFamily: "var(--font-display)",
     letterSpacing: "-0.01em",
   },

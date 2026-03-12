@@ -26,7 +26,8 @@ export default function App() {
 
   return (
     <div style={styles.layout}>
-      <div className="ambient-bg" />
+      <div className="sky-bg" />
+      <div className="sky-trail" />
       <Header onLogout={() => setLoggedIn(false)} />
       <main style={styles.main}>
         {view === "baggage_claim" && selectedId ? (

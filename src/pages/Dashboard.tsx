@@ -215,7 +215,7 @@ export function Dashboard({
       <div className="glass-card-static animate-in animate-in-1" style={styles.emailTip}>
         <span style={styles.emailTipIcon}>&#9993;</span>
         Forward booking emails to{" "}
-        <strong style={{ color: "var(--gold)", fontFamily: "var(--font-mono)", fontSize: 12 }}>track@faresaver.financewithphil.com</strong>
+        <strong style={{ color: "var(--accent)", fontFamily: "var(--font-mono)", fontSize: 12 }}>track@faresaver.financewithphil.com</strong>
       </div>
 
       <div style={styles.grid}>
@@ -290,12 +290,12 @@ const styles: Record<string, React.CSSProperties> = {
     fontFamily: "var(--font-display)", letterSpacing: "-0.02em",
   },
   savings: {
-    fontSize: 14, color: "var(--gold)", marginTop: 4,
+    fontSize: 14, color: "var(--accent)", marginTop: 4,
     fontFamily: "var(--font-mono)", fontWeight: 600,
   },
   goldBtn: {
     padding: "9px 20px", borderRadius: 10, border: "none",
-    background: "var(--gold)", color: "#0a0c14", fontSize: 13,
+    background: "var(--accent)", color: "#fff", fontSize: 13,
     fontWeight: 700, cursor: "pointer", fontFamily: "var(--font-body)",
     letterSpacing: "0.03em", textTransform: "uppercase" as const,
   },
@@ -307,7 +307,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   primaryBtn: {
     padding: "14px 28px", borderRadius: 12, border: "none",
-    background: "var(--gold)", color: "#0a0c14", fontSize: 15,
+    background: "var(--accent)", color: "#fff", fontSize: 15,
     fontWeight: 700, cursor: "pointer", fontFamily: "var(--font-body)",
     letterSpacing: "0.03em", textTransform: "uppercase" as const,
   },

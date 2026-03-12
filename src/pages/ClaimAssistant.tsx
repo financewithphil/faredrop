@@ -140,9 +140,9 @@ export function ClaimAssistant({
                 <div
                   style={{
                     ...styles.statusDot,
-                    background: isActive ? "var(--gold)" : "rgba(255,255,255,0.08)",
-                    border: isCurrent ? "2px solid var(--gold)" : "2px solid transparent",
-                    boxShadow: isCurrent ? "0 0 12px rgba(212, 168, 83, 0.3)" : "none",
+                    background: isActive ? "var(--accent)" : "rgba(255,255,255,0.08)",
+                    border: isCurrent ? "2px solid var(--accent)" : "2px solid transparent",
+                    boxShadow: isCurrent ? "0 0 12px rgba(96, 165, 250, 0.3)" : "none",
                   }}
                 />
                 <span
@@ -158,7 +158,7 @@ export function ClaimAssistant({
                   <div
                     style={{
                       ...styles.statusLine,
-                      background: i < currentIdx ? "var(--gold)" : "rgba(255,255,255,0.06)",
+                      background: i < currentIdx ? "var(--accent)" : "rgba(255,255,255,0.06)",
                     }}
                   />
                 )}
@@ -230,12 +230,12 @@ export function ClaimAssistant({
               <div
                 style={{
                   ...styles.stepCheck,
-                  background: completedSteps.has(i) ? "var(--gold)" : "transparent",
-                  borderColor: completedSteps.has(i) ? "var(--gold)" : "rgba(255,255,255,0.12)",
+                  background: completedSteps.has(i) ? "var(--accent)" : "transparent",
+                  borderColor: completedSteps.has(i) ? "var(--accent)" : "rgba(255,255,255,0.12)",
                 }}
               >
                 {completedSteps.has(i) && (
-                  <span style={{ color: "#0a0c14", fontSize: 12, fontWeight: 700 }}>&#10003;</span>
+                  <span style={{ color: "#fff", fontSize: 12, fontWeight: 700 }}>&#10003;</span>
                 )}
               </div>
               <span
@@ -274,7 +274,7 @@ export function ClaimAssistant({
             ))}
           </ul>
           <p style={styles.expiryNote}>
-            Credit expires: <strong style={{ color: "var(--gold)" }}>{claim.policy.creditExpiry}</strong> from
+            Credit expires: <strong style={{ color: "var(--accent)" }}>{claim.policy.creditExpiry}</strong> from
             issue date
           </p>
         </div>
@@ -315,7 +315,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "var(--text-secondary)", fontFamily: "var(--font-body)",
   },
   backBtn: {
-    background: "none", border: "none", color: "var(--gold)",
+    background: "none", border: "none", color: "var(--accent)",
     fontSize: 14, cursor: "pointer", marginBottom: 20, padding: 0,
     fontFamily: "var(--font-body)", fontWeight: 500,
   },
@@ -328,9 +328,9 @@ const styles: Record<string, React.CSSProperties> = {
     fontFamily: "var(--font-display)", letterSpacing: "-0.02em",
   },
   routeLine: { display: "flex", alignItems: "center", gap: 4, opacity: 0.4 },
-  routeDot: { width: 5, height: 5, borderRadius: "50%", background: "var(--gold)" },
+  routeDot: { width: 5, height: 5, borderRadius: "50%", background: "var(--accent)" },
   routeDash: { width: 22, height: 1, background: "var(--text-muted)" },
-  routePlane: { fontSize: 12, color: "var(--gold)" },
+  routePlane: { fontSize: 12, color: "var(--accent)" },
   airlineRow: {
     display: "flex", alignItems: "center", gap: 8,
     fontSize: 13, color: "var(--text-secondary)", marginBottom: 18,
@@ -340,11 +340,11 @@ const styles: Record<string, React.CSSProperties> = {
     width: 3, height: 3, borderRadius: "50%", background: "var(--text-muted)",
   },
   savingsBox: {
-    background: "rgba(212, 168, 83, 0.06)", borderRadius: 12, padding: 20,
-    textAlign: "center", border: "1px solid rgba(212, 168, 83, 0.15)",
+    background: "rgba(96, 165, 250, 0.06)", borderRadius: 12, padding: 20,
+    textAlign: "center", border: "1px solid rgba(96, 165, 250, 0.15)",
   },
   savingsAmount: {
-    fontSize: 40, fontWeight: 700, color: "var(--gold)",
+    fontSize: 40, fontWeight: 700, color: "var(--accent)",
     fontFamily: "var(--font-mono)", letterSpacing: "-0.03em",
   },
   savingsLabel: {
@@ -391,7 +391,7 @@ const styles: Record<string, React.CSSProperties> = {
   statusActions: { display: "flex", gap: 10, justifyContent: "center" },
   actionBtn: {
     padding: "10px 24px", borderRadius: 10, border: "none",
-    background: "var(--gold)", color: "#0a0c14", fontSize: 13,
+    background: "var(--accent)", color: "#fff", fontSize: 13,
     fontWeight: 700, cursor: "pointer", fontFamily: "var(--font-body)",
     letterSpacing: "0.03em", textTransform: "uppercase" as const,
   },
@@ -422,8 +422,8 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex", gap: 10, marginTop: 22, flexWrap: "wrap",
   },
   linkBtn: {
-    padding: "11px 22px", borderRadius: 10, background: "var(--gold)",
-    color: "#0a0c14", fontSize: 13, fontWeight: 700,
+    padding: "11px 22px", borderRadius: 10, background: "var(--accent)",
+    color: "#fff", fontSize: 13, fontWeight: 700,
     textDecoration: "none", textAlign: "center",
     fontFamily: "var(--font-body)", letterSpacing: "0.03em",
     textTransform: "uppercase" as const,
@@ -439,7 +439,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: 12, padding: 18, marginBottom: 18,
   },
   infoTitle: {
-    fontSize: 13, fontWeight: 700, color: "var(--gold)", marginBottom: 10,
+    fontSize: 13, fontWeight: 700, color: "var(--accent)", marginBottom: 10,
     fontFamily: "var(--font-body)", letterSpacing: "0.04em",
     textTransform: "uppercase" as const,
   },

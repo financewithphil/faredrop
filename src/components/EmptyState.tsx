@@ -37,7 +37,7 @@ export function EmptyState() {
         <div className="animate-in animate-in-3" style={styles.steps}>
           {[
             "Find your booking confirmation email from the airline",
-            <>Forward it to <strong style={{ color: "var(--gold)" }}>{FORWARD_EMAIL}</strong></>,
+            <>Forward it to <strong style={{ color: "var(--accent)" }}>{FORWARD_EMAIL}</strong></>,
             "We'll parse it, monitor prices 3x daily, and alert you on drops",
           ].map((text, i) => (
             <div key={i} style={styles.step}>
@@ -70,7 +70,7 @@ const styles: Record<string, React.CSSProperties> = {
   icon: {
     fontSize: 52,
     marginBottom: 16,
-    filter: "drop-shadow(0 0 12px rgba(212, 168, 83, 0.3))",
+    filter: "drop-shadow(0 0 12px rgba(96, 165, 250, 0.3))",
   },
   title: {
     fontSize: 26,
@@ -113,7 +113,7 @@ const styles: Record<string, React.CSSProperties> = {
     flex: 1,
     fontSize: 14,
     fontWeight: 600,
-    color: "var(--gold)",
+    color: "var(--accent)",
     wordBreak: "break-all" as const,
     textAlign: "left",
     fontFamily: "var(--font-mono)",
@@ -123,8 +123,8 @@ const styles: Record<string, React.CSSProperties> = {
     padding: "7px 16px",
     borderRadius: 8,
     border: "none",
-    background: "var(--gold)",
-    color: "#0a0c14",
+    background: "var(--accent)",
+    color: "#fff",
     fontSize: 12,
     fontWeight: 700,
     cursor: "pointer",
@@ -163,9 +163,9 @@ const styles: Record<string, React.CSSProperties> = {
     width: 32,
     height: 32,
     borderRadius: "50%",
-    background: "rgba(212, 168, 83, 0.12)",
-    border: "1px solid rgba(212, 168, 83, 0.25)",
-    color: "var(--gold)",
+    background: "rgba(96, 165, 250, 0.12)",
+    border: "1px solid rgba(96, 165, 250, 0.25)",
+    color: "var(--accent)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",

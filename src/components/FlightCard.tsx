@@ -147,7 +147,7 @@ const styles: Record<string, React.CSSProperties> = {
     width: 5,
     height: 5,
     borderRadius: "50%",
-    background: "var(--gold)",
+    background: "var(--accent)",
   },
   routeDash: {
     width: 20,
@@ -156,7 +156,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   routePlane: {
     fontSize: 12,
-    color: "var(--gold)",
+    color: "var(--accent)",
   },
   status: {
     padding: "3px 10px",
@@ -209,9 +209,9 @@ const styles: Record<string, React.CSSProperties> = {
   savingsBadge: {
     padding: "5px 14px",
     borderRadius: 100,
-    background: "rgba(212, 168, 83, 0.12)",
-    border: "1px solid rgba(212, 168, 83, 0.25)",
-    color: "var(--gold)",
+    background: "rgba(96, 165, 250, 0.12)",
+    border: "1px solid rgba(96, 165, 250, 0.25)",
+    color: "var(--accent)",
     fontSize: 13,
     fontWeight: 700,
     marginLeft: "auto",

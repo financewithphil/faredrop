@@ -230,7 +230,7 @@ export function BaggageClaimForm({
 const styles: Record<string, React.CSSProperties> = {
   container: { padding: 24, maxWidth: 520, margin: "0 auto", width: "100%" },
   backBtn: {
-    background: "none", border: "none", color: "var(--gold)",
+    background: "none", border: "none", color: "var(--accent)",
     fontSize: 14, cursor: "pointer", marginBottom: 20, padding: 0,
     fontFamily: "var(--font-body)", fontWeight: 500,
   },
@@ -258,8 +258,8 @@ const styles: Record<string, React.CSSProperties> = {
     transition: "all 0.2s ease",
   },
   typeBtnActive: {
-    background: "var(--gold)", color: "#0a0c14",
-    borderColor: "var(--gold)",
+    background: "var(--accent)", color: "#fff",
+    borderColor: "var(--accent)",
   },
   select: {
     padding: "12px 14px", borderRadius: 10, border: "1px solid var(--border)",
@@ -282,7 +282,7 @@ const styles: Record<string, React.CSSProperties> = {
   error: { color: "var(--red)", fontSize: 13, fontFamily: "var(--font-body)" },
   submitBtn: {
     padding: "14px 0", borderRadius: 10, border: "none",
-    background: "var(--gold)", color: "#0a0c14", fontSize: 15,
+    background: "var(--accent)", color: "#fff", fontSize: 15,
     fontWeight: 700, cursor: "pointer", fontFamily: "var(--font-body)",
     letterSpacing: "0.03em", textTransform: "uppercase" as const,
   },

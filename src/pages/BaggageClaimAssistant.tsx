@@ -183,7 +183,7 @@ export function BaggageClaimAssistant({
           </div>
           <div style={styles.infoBlock}>
             <span style={styles.infoLabel}>Max Compensation</span>
-            <span style={{ ...styles.infoValue, color: "var(--gold)" }}>${maxComp.toLocaleString()}</span>
+            <span style={{ ...styles.infoValue, color: "var(--accent)" }}>${maxComp.toLocaleString()}</span>
           </div>
           <div style={styles.infoBlock}>
             <span style={styles.infoLabel}>Processing</span>
@@ -202,9 +202,9 @@ export function BaggageClaimAssistant({
               <div key={s} style={styles.statusStep}>
                 <div style={{
                   ...styles.statusDot,
-                  background: isActive ? "var(--gold)" : "rgba(255,255,255,0.08)",
-                  border: isCurrent ? "2px solid var(--gold)" : "2px solid transparent",
-                  boxShadow: isCurrent ? "0 0 12px rgba(212, 168, 83, 0.3)" : "none",
+                  background: isActive ? "var(--accent)" : "rgba(255,255,255,0.08)",
+                  border: isCurrent ? "2px solid var(--accent)" : "2px solid transparent",
+                  boxShadow: isCurrent ? "0 0 12px rgba(96, 165, 250, 0.3)" : "none",
                 }} />
                 <span style={{
                   ...styles.statusLabel,
@@ -216,7 +216,7 @@ export function BaggageClaimAssistant({
                 {i < STATUS_FLOW.length - 1 && (
                   <div style={{
                     ...styles.statusLine,
-                    background: i < currentStatusIdx ? "var(--gold)" : "rgba(255,255,255,0.06)",
+                    background: i < currentStatusIdx ? "var(--accent)" : "rgba(255,255,255,0.06)",
                   }} />
                 )}
               </div>
@@ -253,7 +253,7 @@ export function BaggageClaimAssistant({
           </div>
         )}
         {claim.status === "escalated_dot" && (
-          <p style={{ color: "var(--gold)", fontSize: 13, textAlign: "center", marginTop: 10, fontFamily: "var(--font-body)" }}>
+          <p style={{ color: "var(--accent)", fontSize: 13, textAlign: "center", marginTop: 10, fontFamily: "var(--font-body)" }}>
             DOT complaint filed — airline must respond within 60 days
           </p>
         )}
@@ -269,10 +269,10 @@ export function BaggageClaimAssistant({
             <div key={i} style={styles.stepItem} onClick={() => toggleStep(i)}>
               <div style={{
                 ...styles.stepCheck,
-                background: completedSteps.has(i) ? "var(--gold)" : "transparent",
-                borderColor: completedSteps.has(i) ? "var(--gold)" : "rgba(255,255,255,0.12)",
+                background: completedSteps.has(i) ? "var(--accent)" : "transparent",
+                borderColor: completedSteps.has(i) ? "var(--accent)" : "rgba(255,255,255,0.12)",
               }}>
-                {completedSteps.has(i) && <span style={{ color: "#0a0c14", fontSize: 12, fontWeight: 700 }}>&#10003;</span>}
+                {completedSteps.has(i) && <span style={{ color: "#fff", fontSize: 12, fontWeight: 700 }}>&#10003;</span>}
               </div>
               <span style={{
                 ...styles.stepText,
@@ -313,7 +313,7 @@ export function BaggageClaimAssistant({
       <div className="glass-card-static animate-in animate-in-4" style={styles.card}>
         <h3 style={styles.sectionTitle}>
           Items in Bag {claim.estimated_value ? (
-            <span style={{ color: "var(--gold)", fontFamily: "var(--font-mono)", fontSize: 14 }}>
+            <span style={{ color: "var(--accent)", fontFamily: "var(--font-mono)", fontSize: 14 }}>
               ${claim.estimated_value.toFixed(0)}
             </span>
           ) : ""}
@@ -403,7 +403,7 @@ export function BaggageClaimAssistant({
             <div style={styles.stepsList}>
               {claim.regulations.dot.steps.map((step, i) => (
                 <div key={i} style={styles.docItem}>
-                  <span style={{ ...styles.docBullet, background: "var(--gold)" }} />
+                  <span style={{ ...styles.docBullet, background: "var(--accent)" }} />
                   <span style={styles.docText}>{i + 1}. {step}</span>
                 </div>
               ))}
@@ -458,7 +458,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "var(--text-secondary)", fontFamily: "var(--font-body)",
   },
   backBtn: {
-    background: "none", border: "none", color: "var(--gold)",
+    background: "none", border: "none", color: "var(--accent)",
     fontSize: 14, cursor: "pointer", marginBottom: 20, padding: 0,
     fontFamily: "var(--font-body)", fontWeight: 500,
   },
@@ -476,9 +476,9 @@ const styles: Record<string, React.CSSProperties> = {
     fontFamily: "var(--font-display)", letterSpacing: "-0.02em",
   },
   routeLine: { display: "flex", alignItems: "center", gap: 4, opacity: 0.4 },
-  routeDot: { width: 5, height: 5, borderRadius: "50%", background: "var(--gold)" },
+  routeDot: { width: 5, height: 5, borderRadius: "50%", background: "var(--accent)" },
   routeDash: { width: 22, height: 1, background: "var(--text-muted)" },
-  routePlane: { fontSize: 12, color: "var(--gold)" },
+  routePlane: { fontSize: 12, color: "var(--accent)" },
   metaRow: {
     display: "flex", alignItems: "center", gap: 8,
     fontSize: 13, color: "var(--text-secondary)", marginBottom: 18,
@@ -526,7 +526,7 @@ const styles: Record<string, React.CSSProperties> = {
   statusActions: { display: "flex", gap: 10, justifyContent: "center" },
   actionBtn: {
     padding: "10px 24px", borderRadius: 10, border: "none",
-    background: "var(--gold)", color: "#0a0c14", fontSize: 13,
+    background: "var(--accent)", color: "#fff", fontSize: 13,
     fontWeight: 700, cursor: "pointer", fontFamily: "var(--font-body)",
     letterSpacing: "0.03em", textTransform: "uppercase" as const,
   },
@@ -548,8 +548,8 @@ const styles: Record<string, React.CSSProperties> = {
   },
   actionLinks: { display: "flex", gap: 10, marginTop: 22, flexWrap: "wrap" },
   linkBtn: {
-    padding: "11px 22px", borderRadius: 10, background: "var(--gold)",
-    color: "#0a0c14", fontSize: 13, fontWeight: 700,
+    padding: "11px 22px", borderRadius: 10, background: "var(--accent)",
+    color: "#fff", fontSize: 13, fontWeight: 700,
     textDecoration: "none", fontFamily: "var(--font-body)",
     letterSpacing: "0.03em", textTransform: "uppercase" as const,
   },
@@ -618,11 +618,11 @@ const styles: Record<string, React.CSSProperties> = {
     borderLeft: "2px solid rgba(56, 189, 248, 0.15)",
   },
   compBox: {
-    background: "rgba(212, 168, 83, 0.04)", border: "1px solid rgba(212, 168, 83, 0.12)",
+    background: "rgba(96, 165, 250, 0.04)", border: "1px solid rgba(96, 165, 250, 0.12)",
     borderRadius: 12, padding: 18, marginBottom: 18,
   },
   compTitle: {
-    fontSize: 12, fontWeight: 700, color: "var(--gold)", marginBottom: 10,
+    fontSize: 12, fontWeight: 700, color: "var(--accent)", marginBottom: 10,
     fontFamily: "var(--font-body)", letterSpacing: "0.06em",
     textTransform: "uppercase" as const,
   },

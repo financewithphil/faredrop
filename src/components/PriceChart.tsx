@@ -80,10 +80,10 @@ export function PriceChart({
           <Line
             type="monotone"
             dataKey="price"
-            stroke="#d4a853"
+            stroke="#60a5fa"
             strokeWidth={2}
-            dot={{ fill: "#d4a853", r: 3, stroke: "rgba(212,168,83,0.3)", strokeWidth: 4 }}
-            activeDot={{ fill: "#d4a853", r: 5, stroke: "rgba(212,168,83,0.4)", strokeWidth: 6 }}
+            dot={{ fill: "#60a5fa", r: 3, stroke: "rgba(96,165,250,0.3)", strokeWidth: 4 }}
+            activeDot={{ fill: "#60a5fa", r: 5, stroke: "rgba(96,165,250,0.4)", strokeWidth: 6 }}
           />
         </LineChart>
       </ResponsiveContainer>

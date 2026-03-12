@@ -174,7 +174,7 @@ export function FlightDetail({
       </div>
 
       {savings !== null && savings > 10 && (
-        <div className="gold-glow animate-in animate-in-3" style={styles.claimCard}>
+        <div className="blue-glow animate-in animate-in-3" style={styles.claimCard}>
           {claimId ? (
             <>
               <div style={styles.claimHeader}>
@@ -238,7 +238,7 @@ function InfoRow({
       <span
         style={{
           ...infoStyles.value,
-          color: highlight ? "var(--gold)" : "var(--text-primary)",
+          color: highlight ? "var(--accent)" : "var(--text-primary)",
           fontWeight: highlight ? 700 : 500,
           fontFamily: mono ? "var(--font-mono)" : "var(--font-body)",
         }}
@@ -267,7 +267,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: "var(--text-secondary)", fontFamily: "var(--font-body)",
   },
   backBtn: {
-    background: "none", border: "none", color: "var(--gold)",
+    background: "none", border: "none", color: "var(--accent)",
     fontSize: 14, cursor: "pointer", marginBottom: 20, padding: 0,
     fontFamily: "var(--font-body)", fontWeight: 500,
   },
@@ -286,12 +286,12 @@ const styles: Record<string, React.CSSProperties> = {
     display: "flex", alignItems: "center", gap: 4, opacity: 0.4,
   },
   routeDot: {
-    width: 5, height: 5, borderRadius: "50%", background: "var(--gold)",
+    width: 5, height: 5, borderRadius: "50%", background: "var(--accent)",
   },
   routeDash: {
     width: 28, height: 1, background: "var(--text-muted)",
   },
-  routePlane: { fontSize: 12, color: "var(--gold)" },
+  routePlane: { fontSize: 12, color: "var(--accent)" },
   infoGrid: {},
   chartCard: {
     padding: 24, marginBottom: 18,
@@ -320,9 +320,9 @@ const styles: Record<string, React.CSSProperties> = {
   checkDate: { color: "var(--text-secondary)", fontFamily: "var(--font-body)" },
   checkPrice: { fontWeight: 600, fontFamily: "var(--font-mono)" },
   claimCard: {
-    background: "rgba(212, 168, 83, 0.06)",
+    background: "rgba(96, 165, 250, 0.06)",
     borderRadius: 14, padding: 22, marginBottom: 18,
-    border: "1px solid rgba(212, 168, 83, 0.2)",
+    border: "1px solid rgba(96, 165, 250, 0.2)",
   },
   claimHeader: {
     display: "flex", justifyContent: "space-between",
@@ -330,13 +330,13 @@ const styles: Record<string, React.CSSProperties> = {
   },
   claimBadge: {
     padding: "3px 12px", borderRadius: 100,
-    background: "rgba(212, 168, 83, 0.12)",
-    color: "var(--gold)", fontSize: 11, fontWeight: 700,
+    background: "rgba(96, 165, 250, 0.12)",
+    color: "var(--accent)", fontSize: 11, fontWeight: 700,
     textTransform: "capitalize" as const,
     fontFamily: "var(--font-body)", letterSpacing: "0.04em",
   },
   claimSavings: {
-    fontSize: 20, fontWeight: 700, color: "var(--gold)",
+    fontSize: 20, fontWeight: 700, color: "var(--accent)",
     fontFamily: "var(--font-mono)", letterSpacing: "-0.02em",
   },
   claimText: {
@@ -345,7 +345,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   claimBtn: {
     padding: "12px 24px", borderRadius: 10, border: "none",
-    background: "var(--gold)", color: "#0a0c14", fontSize: 14,
+    background: "var(--accent)", color: "#fff", fontSize: 14,
     fontWeight: 700, cursor: "pointer", width: "100%",
     fontFamily: "var(--font-body)", letterSpacing: "0.03em",
     textTransform: "uppercase" as const,
